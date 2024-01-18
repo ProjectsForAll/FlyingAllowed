@@ -1,6 +1,7 @@
-package host.plas.exampleproject;
+package host.plas.flyingallowed;
 
-import host.plas.exampleproject.config.MainConfig;
+import host.plas.flyingallowed.config.MainConfig;
+import host.plas.flyingallowed.data.FlightWorlds;
 import io.streamlined.bukkit.PluginBase;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,13 +10,16 @@ import org.bukkit.entity.Player;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 @Getter @Setter
-public final class ExampleProject extends PluginBase {
+public final class FlyingAllowed extends PluginBase {
     @Getter @Setter
-    private static ExampleProject instance;
+    private static FlyingAllowed instance;
     @Getter @Setter
     private static MainConfig mainConfig;
 
-    public ExampleProject() {
+    @Getter @Setter
+    private FlightWorlds flightWorlds;
+
+    public FlyingAllowed() {
         super();
     }
 
@@ -25,11 +29,15 @@ public final class ExampleProject extends PluginBase {
         setInstance(this);
 
         setMainConfig(new MainConfig());
+
+        setFlightWorlds(new FlightWorlds());
     }
 
     @Override
     public void onBaseDisable() {
         // Plugin shutdown logic
+
+        getFlightWorlds().unregister();
     }
 
     /**

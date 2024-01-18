@@ -1,3 +1,20 @@
 name: '${name}'
 version: '${version}'
 main: '${main}'
+
+commands:
+  fly:
+    description: Command to toggle fly
+    permission: streamersunite.command.fly
+    usage: /<command> [player]
+    aliases:
+      - flight
+      - flymode
+  setfly:
+    description: Command to set fly
+    permission: streamersunite.command.setfly
+    usage: /<command> <true/false> [player]
+    aliases:
+      - setflight
+      - setflymode
+      - sfly

@@ -1,6 +1,6 @@
-package host.plas.exampleproject.utils;
+package host.plas.flyingallowed.utils;
 
-import host.plas.exampleproject.ExampleProject;
+import host.plas.flyingallowed.FlyingAllowed;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -20,19 +20,19 @@ public class MessageUtils {
     }
 
     public static String getInfoLogPrefix() {
-        return colorize("&7[&3" + ExampleProject.getInstance().getName() + "&7] &f");
+        return colorize("&7[&3" + FlyingAllowed.getInstance().getName() + "&7] &f");
     }
 
     public static String getErrorLogPrefix() {
-        return colorize("&7[&3" + ExampleProject.getInstance().getName() + "&7] &c");
+        return colorize("&7[&3" + FlyingAllowed.getInstance().getName() + "&7] &c");
     }
 
     public static String getWarningLogPrefix() {
-        return colorize("&7[&3" + ExampleProject.getInstance().getName() + "&7] &e");
+        return colorize("&7[&3" + FlyingAllowed.getInstance().getName() + "&7] &e");
     }
 
     public static String getDebugLogPrefix() {
-        return colorize("&7[&3" + ExampleProject.getInstance().getName() + "&7] &7[&cDEBUG&7] &b");
+        return colorize("&7[&3" + FlyingAllowed.getInstance().getName() + "&7] &7[&cDEBUG&7] &b");
     }
 
     public static void logInfo(String message) {

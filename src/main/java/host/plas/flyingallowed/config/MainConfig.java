@@ -1,13 +1,11 @@
-package host.plas.exampleproject.config;
+package host.plas.flyingallowed.config;
 
-import host.plas.exampleproject.ExampleProject;
+import host.plas.flyingallowed.FlyingAllowed;
 import tv.quaint.storage.resources.flat.simple.SimpleConfiguration;
-
-import java.io.File;
 
 public class MainConfig extends SimpleConfiguration {
     public MainConfig() {
-        super("config.yml", ExampleProject.getInstance(), false);
+        super("config.yml", FlyingAllowed.getInstance(), false);
     }
 
     @Override
