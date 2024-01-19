@@ -1,5 +1,7 @@
 package host.plas.flyingallowed;
 
+import host.plas.flyingallowed.commands.FlyCMD;
+import host.plas.flyingallowed.commands.SetFlyCMD;
 import host.plas.flyingallowed.config.MainConfig;
 import host.plas.flyingallowed.data.FlightWorlds;
 import io.streamlined.bukkit.PluginBase;
@@ -19,6 +21,11 @@ public final class FlyingAllowed extends PluginBase {
     @Getter @Setter
     private FlightWorlds flightWorlds;
 
+    @Getter @Setter
+    private FlyCMD flyCMD;
+    @Getter @Setter
+    private SetFlyCMD setFlyCMD;
+
     public FlyingAllowed() {
         super();
     }
@@ -31,12 +38,16 @@ public final class FlyingAllowed extends PluginBase {
         setMainConfig(new MainConfig());
 
         setFlightWorlds(new FlightWorlds());
+
+        setFlyCMD(new FlyCMD());
+        getFlyCMD().register();
+        setSetFlyCMD(new SetFlyCMD());
+        getSetFlyCMD().register();
     }
 
     @Override
     public void onBaseDisable() {
         // Plugin shutdown logic
-
         getFlightWorlds().unregister();
     }
 
