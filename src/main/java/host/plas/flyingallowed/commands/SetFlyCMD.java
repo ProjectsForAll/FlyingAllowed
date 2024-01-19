@@ -56,10 +56,16 @@ public class SetFlyCMD extends SimplifiedCommand {
         boolean newVal = optionalBoolean.get();
         target.setAllowFlight(newVal);
 
+        if (target.isFlying() && ! newVal) {
+            target.setFlying(false);
+        } else if (! target.isOnGround() && newVal) {
+            target.setFlying(true);
+        }
+
         if (sender.equals(target)) {
-            commandContext.getSender().sendMessage("&eYou have " + (newVal ? "&aenabled" : "&cdisabled") + " &eflying!");
+            commandContext.getSender().sendMessage("&eYou have " + (newVal ? "&aenabled" : "&cdisabled") + " &eflight!");
         } else {
-            commandContext.getSender().sendMessage("&eYou have " + (newVal ? "&aenabled" : "&cdisabled") + " &eflying for &a" + target.getName() + "&e!");
+            commandContext.getSender().sendMessage("&eYou have " + (newVal ? "&aenabled" : "&cdisabled") + " &eflight for &a" + target.getName() + "&e!");
         }
 
         return true;

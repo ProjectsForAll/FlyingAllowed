@@ -48,13 +48,20 @@ public class FlyCMD extends SimplifiedCommand {
             target = player;
         }
 
-        boolean current = target.getAllowFlight();
-        target.setAllowFlight(! current);
+
+        boolean newVal = ! target.getAllowFlight();
+        target.setAllowFlight(newVal);
+
+        if (target.isFlying() && ! newVal) {
+            target.setFlying(false);
+        } else if (! target.isOnGround() && newVal) {
+            target.setFlying(true);
+        }
 
         if (sender.equals(target)) {
-            commandContext.getSender().sendMessage("&eYou have " + (current ? "&cdisabled" : "&aenabled") + " &eflying!");
+            commandContext.getSender().sendMessage("&eYou have " + (newVal ? "&aenabled" : "&cdisabled") + " &eflight!");
         } else {
-            commandContext.getSender().sendMessage("&eYou have " + (current ? "&cdisabled" : "&aenabled") + " &eflying for &a" + target.getName() + "&e!");
+            commandContext.getSender().sendMessage("&eYou have " + (newVal ? "&aenabled" : "&cdisabled") + " &eflight for &a" + target.getName() + "&e!");
         }
 
         return true;
