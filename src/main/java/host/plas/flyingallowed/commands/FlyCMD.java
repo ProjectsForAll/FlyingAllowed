@@ -77,9 +77,9 @@ public class FlyCMD extends SimplifiedCommand {
         if (! sender.hasPermission("flyingallowed.command.fly.others")) return tabComplete;
 
         if (commandContext.getArgs().size() <= 1) {
-            String[] args = commandContext.getArgs().stream().map(CommandArgument::getContent).toList().toArray(new String[0]);
+            String[] args = commandContext.getArgs().stream().map(CommandArgument::getContent).toArray(String[]::new);
 
-            tabComplete.addAll(StringUtils.getAsCompletion(args, Bukkit.getOnlinePlayers().stream().map(Player::getName).toList().toArray(new String[0])));
+            tabComplete.addAll(StringUtils.getAsCompletion(args, Bukkit.getOnlinePlayers().stream().map(Player::getName).toArray(String[]::new)));
         }
 
         return tabComplete;
