@@ -1,12 +1,17 @@
 package host.plas.flyingallowed.commands;
 
 import host.plas.flyingallowed.FlyingAllowed;
+import host.plas.flyingallowed.data.FlightWorlds;
+import host.plas.flyingallowed.data.PlayerMoveData;
 import io.streamlined.bukkit.commands.CommandArgument;
 import io.streamlined.bukkit.commands.CommandContext;
 import io.streamlined.bukkit.commands.SimplifiedCommand;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerMoveEvent;
 import tv.quaint.utils.StringUtils;
 
 import java.util.Optional;
@@ -48,8 +53,8 @@ public class FlyCMD extends SimplifiedCommand {
             target = player;
         }
 
-
         boolean newVal = ! target.getAllowFlight();
+
         target.setAllowFlight(newVal);
 
         if (target.isFlying() && ! newVal) {

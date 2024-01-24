@@ -1,7 +1,9 @@
 package host.plas.flyingallowed;
 
+import host.plas.flyingallowed.commands.BypassCMD;
 import host.plas.flyingallowed.commands.FlyCMD;
 import host.plas.flyingallowed.commands.SetFlyCMD;
+import host.plas.flyingallowed.compat.CompatManager;
 import host.plas.flyingallowed.config.MainConfig;
 import host.plas.flyingallowed.data.FlightWorlds;
 import io.streamlined.bukkit.PluginBase;
@@ -25,6 +27,8 @@ public final class FlyingAllowed extends PluginBase {
     private FlyCMD flyCMD;
     @Getter @Setter
     private SetFlyCMD setFlyCMD;
+    @Getter @Setter
+    private BypassCMD bypassCMD;
 
     public FlyingAllowed() {
         super();
@@ -43,6 +47,10 @@ public final class FlyingAllowed extends PluginBase {
         getFlyCMD().register();
         setSetFlyCMD(new SetFlyCMD());
         getSetFlyCMD().register();
+        setBypassCMD(new BypassCMD());
+        getBypassCMD().register();
+
+        CompatManager.init();
     }
 
     @Override

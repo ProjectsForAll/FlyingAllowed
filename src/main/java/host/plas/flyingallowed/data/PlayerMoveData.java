@@ -1,9 +1,13 @@
 package host.plas.flyingallowed.data;
 
+import host.plas.flyingallowed.FlyingAllowed;
+import host.plas.flyingallowed.compat.CompatManager;
+import host.plas.flyingallowed.compat.integrated.LandsHolder;
 import io.streamlined.bukkit.commands.Sender;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -72,19 +76,70 @@ public class PlayerMoveData {
         return location.getBlock().isEmpty() & location.getBlockY() < world.getMaxHeight() && location.getBlockY() > world.getMinHeight();
     }
 
+    public boolean checkBypassPermissionOn() {
+        return FlyingAllowed.getMainConfig().getAutoToggleOnEnabled() && ! player.hasPermission(FlyingAllowed.getMainConfig().getAutoToggleOnBypassPerm());
+    }
+
+    public boolean checkBypassPermissionOff() {
+        return FlyingAllowed.getMainConfig().getAutoToggleOffEnabled() && ! player.hasPermission(FlyingAllowed.getMainConfig().getAutoToggleOffBypassPerm());
+    }
+
+    public boolean isSoftBypassing() {
+        return player.hasPermission(FlyingAllowed.getMainConfig().getSoftBypassingPerm()) && FlyingAllowed.getMainConfig().isBypassing(player);
+    }
+
+    public boolean checkSoftBypassPermissionOn() {
+        return FlyingAllowed.getMainConfig().getAutoToggleOnEnabled() && ! isSoftBypassing();
+    }
+
+    public boolean checkSoftBypassPermissionOff() {
+        return FlyingAllowed.getMainConfig().getAutoToggleOffEnabled() && ! isSoftBypassing();
+    }
+
     public void checkPermission() {
-        if (! hasPermission()) {
+        GameMode gameMode = player.getGameMode();
+        if (gameMode == GameMode.CREATIVE || gameMode == GameMode.SPECTATOR) return;
+
+        try {
+            if (player.hasPermission(FlyingAllowed.getMainConfig().getLandsToggleOnPerm())) {
+                LandsHolder.LandsAbility ability = CompatManager.getLandsHolder().isFlyableAtLocation(this);
+
+                if (ability == LandsHolder.LandsAbility.ABLE_TO_FLY) {
+                    if (! player.getAllowFlight() && checkBypassPermissionOn() && checkSoftBypassPermissionOn()) {
+                        player.setAllowFlight(true);
+
+                        Sender sender = new Sender(player);
+                        sender.sendMessage("&eToggling &bflight &aon &eas you are &aable to &dfly &ein this &bland&8!");
+                    }
+                    return;
+                } else if (ability == LandsHolder.LandsAbility.UNABLE_TO_FLY) {
+                    if (player.getAllowFlight() && checkBypassPermissionOff() && checkSoftBypassPermissionOff()) {
+                        player.setFlying(false);
+                        player.setAllowFlight(false);
+                        player.teleport(getTopLocation());
+
+                        Sender sender = new Sender(player);
+                        sender.sendMessage("&eToggling &bflight &coff &eas you are &cunable to &dfly &ein this &bland&8!");
+                    }
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (! player.getAllowFlight() && hasPermission() && checkBypassPermissionOn() && checkSoftBypassPermissionOn()) {
+            player.setAllowFlight(true);
+
+            Sender sender = new Sender(player);
+            sender.sendMessage("&eToggling &bflight &aon &eas you &ahave &epermission to &dfly &ein this &bworld&8!");
+        } else if (player.getAllowFlight() && ! hasPermission() && checkBypassPermissionOff() && checkSoftBypassPermissionOff()) {
             player.setFlying(false);
             player.setAllowFlight(false);
             player.teleport(getTopLocation());
 
             Sender sender = new Sender(player);
             sender.sendMessage("&eToggling &bflight &coff &eas you &cdo not have &epermission to &dfly &ein this &bworld&8!");
-        } else {
-            player.setAllowFlight(true);
-
-            Sender sender = new Sender(player);
-            sender.sendMessage("&eToggling &bflight &aon &eas you &ahave &epermission to &dfly &ein this &bworld&8!");
         }
     }
 

@@ -1,20 +1,30 @@
 name: '${name}'
 version: '${version}'
 main: '${main}'
+softdepend:
+  - Lands
 
 commands:
   fly:
     description: Command to toggle fly
     permission: streamersunite.command.fly
-    usage: /<command> [player]
     aliases:
       - flight
       - flymode
-  setfly:
+  set-fly:
     description: Command to set fly
-    permission: streamersunite.command.setfly
-    usage: /<command> <true/false> [player]
+    permission: streamersunite.command.set-fly
     aliases:
+      - setfly
       - setflight
+      - set-flight
       - setflymode
       - sfly
+  fly-bypass:
+    description: Command to bypass flight checks
+    permission: streamersunite.command.fly-bypass
+    aliases:
+      - fb
+      - flybypass
+      - flyb
+      - flightbypass
