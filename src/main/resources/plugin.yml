@@ -7,13 +7,13 @@ softdepend:
 commands:
   fly:
     description: Command to toggle fly
-    permission: streamersunite.command.fly
+    permission: flyingallowed.command.fly
     aliases:
       - flight
       - flymode
   set-fly:
     description: Command to set fly
-    permission: streamersunite.command.set-fly
+    permission: flyingallowed.command.set-fly
     aliases:
       - setfly
       - setflight
@@ -22,7 +22,7 @@ commands:
       - sfly
   fly-bypass:
     description: Command to bypass flight checks
-    permission: streamersunite.command.fly-bypass
+    permission: flyingallowed.command.fly-bypass
     aliases:
       - fb
       - flybypass
