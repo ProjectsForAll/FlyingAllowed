@@ -1,0 +1,37 @@
+ext {
+    IMPL = [
+    ]
+    SHADOW = [
+    ]
+    ANNO = [
+            'com.github.Streamline-Essentials:BukkitOfUtils:master-SNAPSHOT',
+            'dev.folia:folia-api:1.20.4-R0.1-SNAPSHOT',
+            'net.kyori:adventure-api:4.16.0',
+            'net.kyori:adventure-text-serializer-gson:4.16.0',
+            'net.kyori:adventure-text-serializer-legacy:4.16.0',
+            'net.kyori:adventure-text-serializer-plain:4.16.0',
+            'net.kyori:adventure-text-minimessage:4.16.0',
+            'net.kyori:adventure-text-serializer-ansi:4.16.0',
+            'net.kyori:ansi:1.0.3',
+    ]
+    COMP_ONLY = [
+            'com.github.Streamline-Essentials:BukkitOfUtils:master-SNAPSHOT',
+            'dev.folia:folia-api:1.20.4-R0.1-SNAPSHOT',
+            'net.kyori:adventure-api:4.16.0',
+            'net.kyori:adventure-text-serializer-gson:4.16.0',
+            'net.kyori:adventure-text-serializer-legacy:4.16.0',
+            'net.kyori:adventure-text-serializer-plain:4.16.0',
+            'net.kyori:adventure-text-minimessage:4.16.0',
+            'net.kyori:adventure-text-serializer-ansi:4.16.0',
+            'net.kyori:ansi:1.0.3',
+    ]
+    FILES = [
+    ]
+    OTHER_PLUGINS = [
+            'me.clip:placeholderapi:2.11.6',
+            'com.github.angeschossen:LandsAPI:6.44.0',
+            'com.github.GriefPrevention:GriefPrevention:16.18.2',
+            'com.onarandombox.multiversecore:Multiverse-Core:4.3.1',
+            'com.onarandombox.multiversenetherportals:Multiverse-NetherPortals:4.2.1',
+    ]
+}

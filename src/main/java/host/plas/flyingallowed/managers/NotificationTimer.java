@@ -1,6 +1,6 @@
 package host.plas.flyingallowed.managers;
 
-import io.streamlined.bukkit.instances.BaseRunnable;
+import host.plas.bou.scheduling.BaseRunnable;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
@@ -49,14 +49,14 @@ public class NotificationTimer extends BaseRunnable {
     private Player player;
 
     private NotificationTimer(String identifier, Player player) {
-        super(5 * 20, 1, true); // 5 second delayed then cancels. Asynchronous.
+        super(5 * 20, 1); // 5 second delayed then cancels. Asynchronous.
 
         this.identifier = identifier;
         this.player = player;
     }
 
     @Override
-    public void execute() {
+    public void run() {
         removeNotification(identifier, player);
 
         cancel();

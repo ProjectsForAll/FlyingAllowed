@@ -1,13 +1,11 @@
 package host.plas.flyingallowed.config;
 
 import host.plas.flyingallowed.FlyingAllowed;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tv.quaint.storage.resources.flat.simple.SimpleConfiguration;
 
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.stream.Collectors;
 
 public class MainConfig extends SimpleConfiguration {
     public MainConfig() {

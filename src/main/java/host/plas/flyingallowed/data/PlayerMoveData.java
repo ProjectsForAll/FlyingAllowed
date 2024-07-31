@@ -1,9 +1,10 @@
 package host.plas.flyingallowed.data;
 
+import host.plas.bou.commands.Sender;
 import host.plas.flyingallowed.FlyingAllowed;
 import host.plas.flyingallowed.compat.CompatManager;
+import host.plas.flyingallowed.compat.integrated.GriefPreventionHolder;
 import host.plas.flyingallowed.compat.integrated.LandsHolder;
-import io.streamlined.bukkit.commands.Sender;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -12,6 +13,9 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter @Setter
 public class PlayerMoveData {
@@ -101,27 +105,22 @@ public class PlayerMoveData {
         if (gameMode == GameMode.CREATIVE || gameMode == GameMode.SPECTATOR) return;
 
         try {
-            if (player.hasPermission(FlyingAllowed.getMainConfig().getLandsToggleOnPerm())) {
-                LandsHolder.LandsAbility ability = CompatManager.getLandsHolder().isFlyableAtLocation(this);
+            if (CompatManager.isLandsEnabled()) {
+                FlightAbility ability = ((LandsHolder) CompatManager.getLandsHolder().getHolder()).isFlyableAtLocation(this);
 
-                if (ability == LandsHolder.LandsAbility.ABLE_TO_FLY) {
-                    if (! player.getAllowFlight() && checkBypassPermissionOn() && checkSoftBypassPermissionOn()) {
-                        player.setAllowFlight(true);
+                if (ability == FlightAbility.ABLE_TO_FLY || ability == FlightAbility.UNABLE_TO_FLY) {
+                    if (player.hasPermission(FlyingAllowed.getMainConfig().getLandsToggleOnPerm())) {
+                        if (checkFlyAndIsHandled(ability, FlightExtent.LANDS, FlightFlag.TOGGLE_ALLOWED)) return;
+                    } else if (checkFlyAndIsHandled(ability, FlightExtent.LANDS)) return;
+                }
+            }
+            if (CompatManager.isGriefPreventionEnabled()) {
+                FlightAbility ability = ((GriefPreventionHolder) CompatManager.getGriefPreventionHolder().getHolder()).isFlyableAtLocation(this);
 
-                        Sender sender = new Sender(player);
-                        sender.sendMessage("&eToggling &bflight &aon &eas you are &aable to &dfly &ein this &bland&8!");
-                    }
-                    return;
-                } else if (ability == LandsHolder.LandsAbility.UNABLE_TO_FLY) {
-                    if (player.getAllowFlight() && checkBypassPermissionOff() && checkSoftBypassPermissionOff()) {
-                        player.setFlying(false);
-                        player.setAllowFlight(false);
-                        player.teleport(getTopLocation());
-
-                        Sender sender = new Sender(player);
-                        sender.sendMessage("&eToggling &bflight &coff &eas you are &cunable to &dfly &ein this &bland&8!");
-                    }
-                    return;
+                if (ability == FlightAbility.ABLE_TO_FLY || ability == FlightAbility.UNABLE_TO_FLY) {
+                    if (player.hasPermission(FlyingAllowed.getMainConfig().getLandsToggleOnPerm())) {
+                        if (checkFlyAndIsHandled(ability, FlightExtent.GRIEF_PREVENTION, FlightFlag.TOGGLE_ALLOWED)) return;
+                    } else if (checkFlyAndIsHandled(ability, FlightExtent.GRIEF_PREVENTION)) return;
                 }
             }
         } catch (Exception e) {
@@ -149,5 +148,35 @@ public class PlayerMoveData {
 
     public boolean hasPermission() {
         return player.hasPermission(getWorldPermission());
+    }
+
+    public boolean checkFlyAndIsHandled(FlightAbility ability, FlightExtent extent, FlightFlag... flags) {
+        return checkFlyAndIsHandled(ability, extent, new ArrayList<>(List.of(flags)));
+    }
+
+    public boolean checkFlyAndIsHandled(FlightAbility ability, FlightExtent extent, List<FlightFlag> flags) {
+        if (ability == FlightAbility.ABLE_TO_FLY) {
+            if (flags.contains(FlightFlag.TOGGLE_ALLOWED)) {
+                if (!player.getAllowFlight() && checkBypassPermissionOn() && checkSoftBypassPermissionOn()) {
+                    player.setAllowFlight(true);
+
+                    Sender sender = new Sender(player);
+                    sender.sendMessage("&eToggling &bflight &aon &eas you are &aable to &dfly &ein this &bclaim&8!");
+                }
+            }
+            return true;
+        } else if (ability == FlightAbility.UNABLE_TO_FLY) {
+            if (player.getAllowFlight() && checkBypassPermissionOff() && checkSoftBypassPermissionOff()) {
+                player.setFlying(false);
+                player.setAllowFlight(false);
+                player.teleport(getTopLocation());
+
+                Sender sender = new Sender(player);
+                sender.sendMessage("&eToggling &bflight &coff &eas you are &cunable to &dfly &ein this &bclaim&8!");
+            }
+            return true;
+        }
+
+        return false;
     }
 }

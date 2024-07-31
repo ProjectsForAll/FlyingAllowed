@@ -1,9 +1,9 @@
 package host.plas.flyingallowed.commands;
 
+import host.plas.bou.commands.CommandArgument;
+import host.plas.bou.commands.CommandContext;
+import host.plas.bou.commands.SimplifiedCommand;
 import host.plas.flyingallowed.FlyingAllowed;
-import io.streamlined.bukkit.commands.CommandArgument;
-import io.streamlined.bukkit.commands.CommandContext;
-import io.streamlined.bukkit.commands.SimplifiedCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

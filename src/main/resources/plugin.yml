@@ -1,8 +1,14 @@
 name: '${name}'
 version: '${version}'
 main: '${main}'
+authors: [ Drak ]
+depend:
+  - BukkitOfUtils
 softdepend:
   - Lands
+  - PlaceholderAPI
+  - GriefPrevention
+folia-supported: true
 
 commands:
   fly:
