@@ -4,6 +4,7 @@ import host.plas.bou.commands.Sender;
 import host.plas.flyingallowed.FlyingAllowed;
 import host.plas.flyingallowed.compat.CompatManager;
 import host.plas.flyingallowed.compat.integrated.GriefPreventionHolder;
+import host.plas.flyingallowed.compat.integrated.KingdomsHolder;
 import host.plas.flyingallowed.compat.integrated.LandsHolder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -116,6 +117,15 @@ public class PlayerMoveData {
             }
             if (CompatManager.isGriefPreventionEnabled()) {
                 FlightAbility ability = ((GriefPreventionHolder) CompatManager.getGriefPreventionHolder().getHolder()).isFlyableAtLocation(this);
+
+                if (ability == FlightAbility.ABLE_TO_FLY || ability == FlightAbility.UNABLE_TO_FLY) {
+                    if (player.hasPermission(FlyingAllowed.getMainConfig().getLandsToggleOnPerm())) {
+                        if (checkFlyAndIsHandled(ability, FlightExtent.GRIEF_PREVENTION, FlightFlag.TOGGLE_ALLOWED)) return;
+                    } else if (checkFlyAndIsHandled(ability, FlightExtent.GRIEF_PREVENTION)) return;
+                }
+            }
+            if (CompatManager.isKingdomsEnabled()) {
+                FlightAbility ability = ((KingdomsHolder) CompatManager.getKingdomsHolder().getHolder()).isFlyableAtLocation(this);
 
                 if (ability == FlightAbility.ABLE_TO_FLY || ability == FlightAbility.UNABLE_TO_FLY) {
                     if (player.hasPermission(FlyingAllowed.getMainConfig().getLandsToggleOnPerm())) {
