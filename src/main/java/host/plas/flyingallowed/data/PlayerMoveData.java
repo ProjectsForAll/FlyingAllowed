@@ -2,10 +2,7 @@ package host.plas.flyingallowed.data;
 
 import host.plas.bou.commands.Sender;
 import host.plas.flyingallowed.FlyingAllowed;
-import host.plas.flyingallowed.compat.CompatManager;
-import host.plas.flyingallowed.compat.integrated.GriefPreventionHolder;
-import host.plas.flyingallowed.compat.integrated.KingdomsHolder;
-import host.plas.flyingallowed.compat.integrated.LandsHolder;
+import host.plas.flyingallowed.compat.*;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -129,8 +126,17 @@ public class PlayerMoveData {
 
                 if (ability == FlightAbility.ABLE_TO_FLY || ability == FlightAbility.UNABLE_TO_FLY) {
                     if (player.hasPermission(FlyingAllowed.getMainConfig().getLandsToggleOnPerm())) {
-                        if (checkFlyAndIsHandled(ability, FlightExtent.GRIEF_PREVENTION, FlightFlag.TOGGLE_ALLOWED)) return;
-                    } else if (checkFlyAndIsHandled(ability, FlightExtent.GRIEF_PREVENTION)) return;
+                        if (checkFlyAndIsHandled(ability, FlightExtent.KINGDOMS, FlightFlag.TOGGLE_ALLOWED)) return;
+                    } else if (checkFlyAndIsHandled(ability, FlightExtent.KINGDOMS)) return;
+                }
+            }
+            if (CompatManager.isSSEnabled()) {
+                FlightAbility ability = ((SSkyblockHolder) CompatManager.getSSHolder().getHolder()).isFlyableAtLocation(this);
+
+                if (ability == FlightAbility.ABLE_TO_FLY || ability == FlightAbility.UNABLE_TO_FLY) {
+                    if (player.hasPermission(FlyingAllowed.getMainConfig().getLandsToggleOnPerm())) {
+                        if (checkFlyAndIsHandled(ability, FlightExtent.KINGDOMS, FlightFlag.TOGGLE_ALLOWED)) return;
+                    } else if (checkFlyAndIsHandled(ability, FlightExtent.KINGDOMS)) return;
                 }
             }
         } catch (Exception e) {
@@ -167,7 +173,7 @@ public class PlayerMoveData {
     public boolean checkFlyAndIsHandled(FlightAbility ability, FlightExtent extent, List<FlightFlag> flags) {
         if (ability == FlightAbility.ABLE_TO_FLY) {
             if (flags.contains(FlightFlag.TOGGLE_ALLOWED)) {
-                if (!player.getAllowFlight() && checkBypassPermissionOn() && checkSoftBypassPermissionOn()) {
+                if (! player.getAllowFlight() && checkBypassPermissionOn() && checkSoftBypassPermissionOn()) {
                     player.setAllowFlight(true);
 
                     Sender sender = new Sender(player);

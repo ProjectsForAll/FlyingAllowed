@@ -44,6 +44,8 @@ repositories {
     maven { url 'https://repo.papermc.io/repository/maven-snapshots/' }
     maven { url 'https://repo.papermc.io/repository/maven-public/' }
     maven { url = "https://repo.onarandombox.com/content/groups/public/" }
+    maven { url 'https://repo.bg-software.com/repository/nms/' }
+    maven { url 'https://repo.bg-software.com/repository/api/' }
 }
 
 disableAutoTargetJvm()

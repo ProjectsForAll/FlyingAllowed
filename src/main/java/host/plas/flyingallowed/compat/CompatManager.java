@@ -1,9 +1,11 @@
 package host.plas.flyingallowed.compat;
 
+import host.plas.bou.compat.EmptyHolder;
+import host.plas.bou.compat.HeldHolder;
 import host.plas.flyingallowed.FlyingAllowed;
-import host.plas.flyingallowed.compat.integrated.GPHeld;
-import host.plas.flyingallowed.compat.integrated.KingdomsHeld;
-import host.plas.flyingallowed.compat.integrated.LandsHeld;
+import host.plas.flyingallowed.compat.GPHeld;
+import host.plas.flyingallowed.compat.KingdomsHeld;
+import host.plas.flyingallowed.compat.LandsHeld;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -41,6 +43,15 @@ public class CompatManager {
             FlyingAllowed.getInstance().logInfo("Kingdoms not found, skipping...");
         }
         holders.put(kingdomsIdentifier, kingdomsHolder);
+
+        String ssIdentifier = "superiorskyblock";
+        HeldHolder ssHolder = new EmptyHolder(ssIdentifier);
+        try {
+            ssHolder = new SSkyblockHeld();
+        } catch (Throwable e) {
+            FlyingAllowed.getInstance().logInfo("Kingdoms not found, skipping...");
+        }
+        holders.put(ssIdentifier, ssHolder);
     }
 
     public static HeldHolder getHolder(String identifier) {
@@ -63,6 +74,10 @@ public class CompatManager {
         return getHolder("kingdoms");
     }
 
+    public static HeldHolder getSSHolder() {
+        return getHolder("superiorskyblock");
+    }
+
     public static boolean isLandsEnabled() {
         return isEnabled("lands");
     }
@@ -73,5 +88,9 @@ public class CompatManager {
 
     public static boolean isKingdomsEnabled() {
         return isEnabled("kingdoms");
+    }
+
+    public static boolean isSSEnabled() {
+        return isEnabled("superiorskyblock");
     }
 }

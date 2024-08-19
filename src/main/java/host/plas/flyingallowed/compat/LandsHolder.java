@@ -1,7 +1,7 @@
-package host.plas.flyingallowed.compat.integrated;
+package host.plas.flyingallowed.compat;
 
+import host.plas.bou.compat.ApiHolder;
 import host.plas.flyingallowed.FlyingAllowed;
-import host.plas.flyingallowed.compat.ApiHolder;
 import host.plas.flyingallowed.data.FlightAbility;
 import host.plas.flyingallowed.data.PlayerMoveData;
 import me.angeschossen.lands.api.LandsIntegration;

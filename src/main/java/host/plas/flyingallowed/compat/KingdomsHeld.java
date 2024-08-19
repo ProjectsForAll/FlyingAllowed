@@ -1,6 +1,6 @@
-package host.plas.flyingallowed.compat.integrated;
+package host.plas.flyingallowed.compat;
 
-import host.plas.flyingallowed.compat.HeldHolder;
+import host.plas.bou.compat.HeldHolder;
 
 public class KingdomsHeld extends HeldHolder {
     public KingdomsHeld() {

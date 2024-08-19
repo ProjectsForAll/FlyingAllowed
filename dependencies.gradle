@@ -34,5 +34,6 @@ ext {
             'com.onarandombox.multiversecore:Multiverse-Core:4.3.1',
             'com.onarandombox.multiversenetherportals:Multiverse-NetherPortals:4.2.1',
             'com.github.cryptomorin:kingdoms:1.16.8.1.1',
+            'com.bgsoftware:SuperiorSkyblockAPI:2024.2',
     ]
 }
