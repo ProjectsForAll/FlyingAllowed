@@ -1,6 +1,7 @@
-package host.plas.flyingallowed.compat;
+package host.plas.flyingallowed.compat.plugins.gp;
 
 import host.plas.bou.compat.ApiHolder;
+import host.plas.flyingallowed.compat.CompatManager;
 import host.plas.flyingallowed.data.FlightAbility;
 import host.plas.flyingallowed.data.PlayerMoveData;
 import me.ryanhamshire.GriefPrevention.Claim;
@@ -9,7 +10,7 @@ import me.ryanhamshire.GriefPrevention.GriefPrevention;
 
 public class GriefPreventionHolder extends ApiHolder<GriefPrevention> {
     public GriefPreventionHolder() {
-        super("lands", (v) -> GriefPrevention.instance);
+        super(CompatManager.GRIEF_PREVENTION_IDENTIFIER, (v) -> GriefPrevention.instance);
     }
 
     public FlightAbility isFlyableAtLocation(PlayerMoveData moveData) {

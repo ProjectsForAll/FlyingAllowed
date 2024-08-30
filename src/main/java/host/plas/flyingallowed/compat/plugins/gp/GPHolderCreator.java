@@ -1,4 +1,4 @@
-package host.plas.flyingallowed.compat;
+package host.plas.flyingallowed.compat.plugins.gp;
 
 import host.plas.bou.compat.ApiHolder;
 

@@ -104,7 +104,7 @@ public class PlayerMoveData {
 
         try {
             if (CompatManager.isLandsEnabled()) {
-                FlightAbility ability = ((LandsHolder) CompatManager.getLandsHolder().getHolder()).isFlyableAtLocation(this);
+                FlightAbility ability = CompatManager.getLandsHolder().isFlyableAtLocation(this);
 
                 if (ability == FlightAbility.ABLE_TO_FLY || ability == FlightAbility.UNABLE_TO_FLY) {
                     if (player.hasPermission(FlyingAllowed.getMainConfig().getLandsToggleOnPerm())) {
@@ -113,7 +113,7 @@ public class PlayerMoveData {
                 }
             }
             if (CompatManager.isGriefPreventionEnabled()) {
-                FlightAbility ability = ((GriefPreventionHolder) CompatManager.getGriefPreventionHolder().getHolder()).isFlyableAtLocation(this);
+                FlightAbility ability = CompatManager.getGriefPreventionHolder().isFlyableAtLocation(this);
 
                 if (ability == FlightAbility.ABLE_TO_FLY || ability == FlightAbility.UNABLE_TO_FLY) {
                     if (player.hasPermission(FlyingAllowed.getMainConfig().getLandsToggleOnPerm())) {
@@ -122,21 +122,30 @@ public class PlayerMoveData {
                 }
             }
             if (CompatManager.isKingdomsEnabled()) {
-                FlightAbility ability = ((KingdomsHolder) CompatManager.getKingdomsHolder().getHolder()).isFlyableAtLocation(this);
+                FlightAbility ability = CompatManager.getKingdomsHolder().isFlyableAtLocation(this);
 
                 if (ability == FlightAbility.ABLE_TO_FLY || ability == FlightAbility.UNABLE_TO_FLY) {
                     if (player.hasPermission(FlyingAllowed.getMainConfig().getLandsToggleOnPerm())) {
-                        if (checkFlyAndIsHandled(ability, FlightExtent.KINGDOMS, FlightFlag.TOGGLE_ALLOWED)) return;
-                    } else if (checkFlyAndIsHandled(ability, FlightExtent.KINGDOMS)) return;
+                        if (checkFlyAndIsHandled(ability, FlightExtent.KINGDOMSX, FlightFlag.TOGGLE_ALLOWED)) return;
+                    } else if (checkFlyAndIsHandled(ability, FlightExtent.KINGDOMSX)) return;
                 }
             }
             if (CompatManager.isSSEnabled()) {
-                FlightAbility ability = ((SSkyblockHolder) CompatManager.getSSHolder().getHolder()).isFlyableAtLocation(this);
+                FlightAbility ability = CompatManager.getSSHolder().isFlyableAtLocation(this);
 
                 if (ability == FlightAbility.ABLE_TO_FLY || ability == FlightAbility.UNABLE_TO_FLY) {
                     if (player.hasPermission(FlyingAllowed.getMainConfig().getLandsToggleOnPerm())) {
-                        if (checkFlyAndIsHandled(ability, FlightExtent.KINGDOMS, FlightFlag.TOGGLE_ALLOWED)) return;
-                    } else if (checkFlyAndIsHandled(ability, FlightExtent.KINGDOMS)) return;
+                        if (checkFlyAndIsHandled(ability, FlightExtent.SUPERIOR_SKYBLOCK, FlightFlag.TOGGLE_ALLOWED)) return;
+                    } else if (checkFlyAndIsHandled(ability, FlightExtent.SUPERIOR_SKYBLOCK)) return;
+                }
+            }
+            if (CompatManager.isPStonesEnabled()) {
+                FlightAbility ability = CompatManager.getPStonesHolder().isFlyableAtLocation(this);
+
+                if (ability == FlightAbility.ABLE_TO_FLY || ability == FlightAbility.UNABLE_TO_FLY) {
+                    if (player.hasPermission(FlyingAllowed.getMainConfig().getLandsToggleOnPerm())) {
+                        if (checkFlyAndIsHandled(ability, FlightExtent.PROTECTION_STONES, FlightFlag.TOGGLE_ALLOWED)) return;
+                    } else if (checkFlyAndIsHandled(ability, FlightExtent.PROTECTION_STONES)) return;
                 }
             }
         } catch (Exception e) {

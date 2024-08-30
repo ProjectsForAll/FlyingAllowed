@@ -3,94 +3,118 @@ package host.plas.flyingallowed.compat;
 import host.plas.bou.compat.EmptyHolder;
 import host.plas.bou.compat.HeldHolder;
 import host.plas.flyingallowed.FlyingAllowed;
-import host.plas.flyingallowed.compat.GPHeld;
-import host.plas.flyingallowed.compat.KingdomsHeld;
-import host.plas.flyingallowed.compat.LandsHeld;
+import host.plas.flyingallowed.compat.plugins.gp.GPHeld;
+import host.plas.flyingallowed.compat.plugins.gp.GriefPreventionHolder;
+import host.plas.flyingallowed.compat.plugins.kingdoms.KingdomsHeld;
+import host.plas.flyingallowed.compat.plugins.kingdoms.KingdomsHolder;
+import host.plas.flyingallowed.compat.plugins.lands.LandsHeld;
+import host.plas.flyingallowed.compat.plugins.lands.LandsHolder;
+import host.plas.flyingallowed.compat.plugins.pstones.PStonesHeld;
+import host.plas.flyingallowed.compat.plugins.pstones.PStonesHolder;
+import host.plas.flyingallowed.compat.plugins.sskyblock.SSkyblockHeld;
+import host.plas.flyingallowed.compat.plugins.sskyblock.SSkyblockHolder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.concurrent.ConcurrentSkipListMap;
-
 @Getter @Setter
 public class CompatManager {
-    @Getter @Setter
-    private static ConcurrentSkipListMap<String, HeldHolder> holders = new ConcurrentSkipListMap<>();
+    public static final String LANDS_IDENTIFIER = "Lands";
+    public static final String GRIEF_PREVENTION_IDENTIFIER = "GriefPrevention";
+    public static final String KINGDOMS_IDENTIFIER = "KingdomsX";
+    public static final String SS_IDENTIFIER = "SuperiorSkyblock2";
+    public static final String PS_IDENTIFIER = "ProtectionStones";
 
     public static void init() {
-        String landsIdentifier = "lands";
-        HeldHolder landsHolder = new EmptyHolder(landsIdentifier);
+        HeldHolder landsHolder = new EmptyHolder(LANDS_IDENTIFIER);
         try {
             landsHolder = new LandsHeld();
         } catch (Throwable e) {
             FlyingAllowed.getInstance().logInfo("Lands not found, skipping...");
         }
-        holders.put(landsIdentifier, landsHolder);
+        putHolder(LANDS_IDENTIFIER, landsHolder);
 
-        String griefPreventionIdentifier = "griefprevention";
-        HeldHolder griefPreventionHolder = new EmptyHolder(griefPreventionIdentifier);
+        HeldHolder griefPreventionHolder = new EmptyHolder(GRIEF_PREVENTION_IDENTIFIER);
         try {
             griefPreventionHolder = new GPHeld();
         } catch (Throwable e) {
             FlyingAllowed.getInstance().logInfo("GriefPrevention not found, skipping...");
         }
-        holders.put(griefPreventionIdentifier, griefPreventionHolder);
+        putHolder(GRIEF_PREVENTION_IDENTIFIER, griefPreventionHolder);
 
-        String kingdomsIdentifier = "kingdoms";
-        HeldHolder kingdomsHolder = new EmptyHolder(kingdomsIdentifier);
+        HeldHolder kingdomsHolder = new EmptyHolder(KINGDOMS_IDENTIFIER);
         try {
             kingdomsHolder = new KingdomsHeld();
         } catch (Throwable e) {
-            FlyingAllowed.getInstance().logInfo("Kingdoms not found, skipping...");
+            FlyingAllowed.getInstance().logInfo("KingdomsX not found, skipping...");
         }
-        holders.put(kingdomsIdentifier, kingdomsHolder);
+        putHolder(KINGDOMS_IDENTIFIER, kingdomsHolder);
 
-        String ssIdentifier = "superiorskyblock";
-        HeldHolder ssHolder = new EmptyHolder(ssIdentifier);
+        HeldHolder ssHolder = new EmptyHolder(SS_IDENTIFIER);
         try {
             ssHolder = new SSkyblockHeld();
         } catch (Throwable e) {
-            FlyingAllowed.getInstance().logInfo("Kingdoms not found, skipping...");
+            FlyingAllowed.getInstance().logInfo("SuperiorSkyblock2 not found, skipping...");
         }
-        holders.put(ssIdentifier, ssHolder);
+        putHolder(SS_IDENTIFIER, ssHolder);
+
+        HeldHolder psHolder = new EmptyHolder(PS_IDENTIFIER);
+        try {
+            psHolder = new PStonesHeld();
+        } catch (Throwable e) {
+            FlyingAllowed.getInstance().logInfo("ProtectionStones not found, skipping...");
+        }
+        putHolder(PS_IDENTIFIER, psHolder);
+    }
+
+    public static void putHolder(String identifier, HeldHolder holder) {
+        host.plas.bou.compat.CompatManager.getHolders().put(identifier, holder);
     }
 
     public static HeldHolder getHolder(String identifier) {
-        return holders.get(identifier);
+        return host.plas.bou.compat.CompatManager.getHolders().get(identifier);
     }
 
     public static boolean isEnabled(String identifier) {
         return getHolder(identifier) != null && getHolder(identifier).isEnabled();
     }
 
-    public static HeldHolder getLandsHolder() {
-        return getHolder("lands");
+    public static LandsHolder getLandsHolder() {
+        return (LandsHolder) getHolder(LANDS_IDENTIFIER).getHolder();
     }
 
-    public static HeldHolder getGriefPreventionHolder() {
-        return getHolder("griefprevention");
+    public static GriefPreventionHolder getGriefPreventionHolder() {
+        return (GriefPreventionHolder) getHolder(GRIEF_PREVENTION_IDENTIFIER).getHolder();
     }
 
-    public static HeldHolder getKingdomsHolder() {
-        return getHolder("kingdoms");
+    public static KingdomsHolder getKingdomsHolder() {
+        return (KingdomsHolder) getHolder(KINGDOMS_IDENTIFIER).getHolder();
     }
 
-    public static HeldHolder getSSHolder() {
-        return getHolder("superiorskyblock");
+    public static SSkyblockHolder getSSHolder() {
+        return (SSkyblockHolder) getHolder(SS_IDENTIFIER).getHolder();
+    }
+
+    public static PStonesHolder getPStonesHolder() {
+        return (PStonesHolder) getHolder(PS_IDENTIFIER).getHolder();
     }
 
     public static boolean isLandsEnabled() {
-        return isEnabled("lands");
+        return isEnabled(LANDS_IDENTIFIER);
     }
 
     public static boolean isGriefPreventionEnabled() {
-        return isEnabled("griefprevention");
+        return isEnabled(GRIEF_PREVENTION_IDENTIFIER);
     }
 
     public static boolean isKingdomsEnabled() {
-        return isEnabled("kingdoms");
+        return isEnabled(KINGDOMS_IDENTIFIER);
     }
 
     public static boolean isSSEnabled() {
-        return isEnabled("superiorskyblock");
+        return isEnabled(SS_IDENTIFIER);
+    }
+
+    public static boolean isPStonesEnabled() {
+        return isEnabled(PS_IDENTIFIER);
     }
 }
