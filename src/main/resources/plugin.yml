@@ -11,6 +11,8 @@ softdepend:
   - ProtectionStones
   - SuperiorSkyblock2
   - KingdomsX
+  - HuskClaims
+  - WorldGuard
 folia-supported: true
 
 commands:

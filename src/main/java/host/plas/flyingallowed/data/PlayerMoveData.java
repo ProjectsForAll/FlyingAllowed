@@ -122,14 +122,14 @@ public class PlayerMoveData {
             player.setAllowFlight(true);
 
             Sender sender = new Sender(player);
-            sender.sendMessage("&eToggling &bflight &aon &eas you &ahave &epermission to &dfly &ein this &bworld&8!");
+            sender.sendMessage(FlyingAllowed.getMessageConfig().getToggleOnWorldMessage());
         } else if (player.getAllowFlight() && ! hasPermission() && checkBypassPermissionOff() && checkSoftBypassPermissionOff()) {
             player.setFlying(false);
             player.setAllowFlight(false);
             teleportTopLocation();
 
             Sender sender = new Sender(player);
-            sender.sendMessage("&eToggling &bflight &coff &eas you &cdo not have &epermission to &dfly &ein this &bworld&8!");
+            sender.sendMessage(FlyingAllowed.getMessageConfig().getToggleOffWorldMessage());
         }
     }
 
@@ -152,7 +152,7 @@ public class PlayerMoveData {
                     player.setAllowFlight(true);
 
                     Sender sender = new Sender(player);
-                    sender.sendMessage("&eToggling &bflight &aon &eas you are &aable to &dfly &ein this &bclaim&8!");
+                    sender.sendMessage(FlyingAllowed.getMessageConfig().getToggleOnClaimMessage());
                 }
             }
             return true;
@@ -163,7 +163,7 @@ public class PlayerMoveData {
                 teleportTopLocation();
 
                 Sender sender = new Sender(player);
-                sender.sendMessage("&eToggling &bflight &coff &eas you are &cunable to &dfly &ein this &bclaim&8!");
+                sender.sendMessage(FlyingAllowed.getMessageConfig().getToggleOffClaimMessage());
             }
             return true;
         }

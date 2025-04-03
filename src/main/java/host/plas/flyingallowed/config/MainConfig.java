@@ -21,6 +21,11 @@ public class MainConfig extends SimpleConfiguration {
         getAutoToggleOffBypassPerm();
 
         getLandsToggleOnPerm();
+        getSoftBypassingPerm();
+        getCurrentSoftBypassingPlayers();
+
+        getGPClaimExtentsAllowed();
+        getHCClaimExtentsAllowed();
     }
 
     public boolean getAutoToggleOnEnabled() {

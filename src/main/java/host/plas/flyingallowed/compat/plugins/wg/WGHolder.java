@@ -1,10 +1,13 @@
 package host.plas.flyingallowed.compat.plugins.wg;
 
+import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.internal.platform.WorldGuardPlatform;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.StateFlag;
@@ -22,19 +25,17 @@ import lombok.Setter;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class WGHolder extends FlyingHolder<WorldGuard> {
+public class WGHolder extends FlyingHolder<WorldGuardPlugin> {
     public static final String FLIGHT_FLAG_NAME = "flyingallowed-allow-flight";
     @Getter @Setter
     private static StateFlag flightFlag;
 
     public WGHolder() {
-        super(CompatManager.WG_IDENTIFIER, (v) -> WorldGuard.getInstance(), FlightExtent.WORLDGUARD);
-
-        registerFlightFlag();
+        super(CompatManager.WG_IDENTIFIER, (v) -> WorldGuardPlugin.inst(), FlightExtent.WORLDGUARD);
     }
 
-    public void registerFlightFlag() {
-        FlagRegistry registry = api().getFlagRegistry();
+    public static void registerFlightFlag() {
+        FlagRegistry registry = WorldGuard.getInstance().getFlagRegistry();
         try {
             StateFlag flag = new StateFlag(FLIGHT_FLAG_NAME, false);
             registry.register(flag);
@@ -60,15 +61,16 @@ public class WGHolder extends FlyingHolder<WorldGuard> {
                 moveData.getTo().getY(),
                 moveData.getTo().getZ()
         );
-        RegionManager regionManager = api().getPlatform().getRegionContainer().get(new BukkitWorld(moveData.getToWorld()));
+        RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(new BukkitWorld(moveData.getToWorld()));
         if (regionManager == null) return FlightAbility.ISSUE;
         ApplicableRegionSet regionSet = regionManager.getApplicableRegions(position);
 
         LocalPlayer player;
         try {
-            player = api().checkPlayer(WorldEditPlugin.getInstance().wrapPlayer(moveData.getPlayer()));
+            player = api().wrapPlayer(moveData.getPlayer());
         } catch (Throwable e) {
-            FlyingAllowed.getInstance().getLogger().warning("WorldGuard API is not available. Please check your WorldGuard installation.");
+            FlyingAllowed.getInstance().logWarning("Failed to get LocalPlayer from Player... This is not supposed to happen.");
+            FlyingAllowed.getInstance().logWarning(e);
             return FlightAbility.NO_API;
         }
 
@@ -99,18 +101,22 @@ public class WGHolder extends FlyingHolder<WorldGuard> {
 
     public boolean checkClaimExtents(LocalPlayer player, ApplicableRegionSet regionSet) {
         AtomicBoolean fail = new AtomicBoolean(false);
+        AtomicBoolean allow = new AtomicBoolean(false);
 
         regionSet.forEach(region -> {
             if (fail.get()) return;
 
             StateFlag.State state = region.getFlag(getFlightFlag());
-            if (state == null) {
-                fail.set(true);
-            } else if (state != StateFlag.State.ALLOW) {
-                fail.set(true);
+            if (state != null) {
+                if (state == StateFlag.State.ALLOW) {
+                    allow.set(true);
+                }
+                if (state == StateFlag.State.DENY) {
+                    fail.set(true);
+                }
             }
         });
 
-        return ! fail.get();
+        return allow.get() && ! fail.get();
     }
 }

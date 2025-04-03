@@ -1,0 +1,27 @@
+toggle:
+  on:
+    world:
+      message: "&eToggling &bflight &aon &eas you &ahave &epermission to &dfly &ein this &bworld&8!"
+    claim:
+      message: "&eToggling &bflight &aon &eas you are &aable to &dfly &ein this &bclaim&8!"
+  off:
+    world:
+      message: "&eToggling &bflight &coff &eas you &cdo not have &epermission to &dfly &ein this &bworld&8!"
+    claim:
+      message: "&eToggling &bflight &coff &eas you are &cunable to &dfly &ein this &bclaim&8!"
+
+placeholders:
+  enabled: "&aenabled"
+  disabled: "&cdisabled"
+
+commands:
+  fly:
+    self:
+      self-message: "&eYou have &r%status% &bflight&8!"
+    other:
+      self-message: "&eYou have &r%status% &bflight &efor &c%player_name%&8!"
+  set-fly:
+    self:
+      self-message: "&eYou have set your &bflight &eto &r%status%&8!"
+    other:
+      self-message: "&eYou have set &c%player_name%&7'&es &bflight &eto &r%status%&8!"

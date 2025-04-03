@@ -53,6 +53,7 @@ public class SetFlyCMD extends SimplifiedCommand {
             target = player;
         }
 
+        boolean oldVal = target.getAllowFlight();
         boolean newVal = optionalBoolean.get();
 
         target.setAllowFlight(newVal);
@@ -64,9 +65,27 @@ public class SetFlyCMD extends SimplifiedCommand {
         }
 
         if (sender.equals(target)) {
-            commandContext.getSender().sendMessage("&eYou have " + (newVal ? "&aenabled" : "&cdisabled") + " &eflight!");
+            commandContext.getSender().sendMessage(
+                    FlyingAllowed.getMessageConfig().getCommandSetFlySelfSelfMessage()
+                            .replace("%status%",
+                                    newVal ? FlyingAllowed.getMessageConfig().getPlaceholderEnabled() : FlyingAllowed.getMessageConfig().getPlaceholderDisabled())
+                            .replace("%old_status%",
+                                    oldVal ? FlyingAllowed.getMessageConfig().getPlaceholderEnabled() : FlyingAllowed.getMessageConfig().getPlaceholderDisabled())
+                            .replace("%player_name%", target.getName())
+                            .replace("%player_uuid%", target.getUniqueId().toString())
+                            .replace("%player_display%", target.getDisplayName())
+            );
         } else {
-            commandContext.getSender().sendMessage("&eYou have " + (newVal ? "&aenabled" : "&cdisabled") + " &eflight for &a" + target.getName() + "&e!");
+            commandContext.getSender().sendMessage(
+                    FlyingAllowed.getMessageConfig().getCommandSetFlyOtherSelfMessage()
+                            .replace("%status%",
+                                    newVal ? FlyingAllowed.getMessageConfig().getPlaceholderEnabled() : FlyingAllowed.getMessageConfig().getPlaceholderDisabled())
+                            .replace("%old_status%",
+                                    oldVal ? FlyingAllowed.getMessageConfig().getPlaceholderEnabled() : FlyingAllowed.getMessageConfig().getPlaceholderDisabled())
+                            .replace("%player_name%", target.getName())
+                            .replace("%player_uuid%", target.getUniqueId().toString())
+                            .replace("%player_display%", target.getDisplayName())
+            );
         }
 
         return true;
