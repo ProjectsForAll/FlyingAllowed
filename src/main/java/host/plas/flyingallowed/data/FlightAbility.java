@@ -5,6 +5,7 @@ public enum FlightAbility {
         ABLE_TO_FLY,
         UNABLE_TO_FLY,
         ISSUE,
-        NO_CLAIM
+        NO_CLAIM,
+        NONE,
         ;
 }

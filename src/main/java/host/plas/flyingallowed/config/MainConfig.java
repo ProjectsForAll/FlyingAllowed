@@ -5,11 +5,12 @@ import org.bukkit.entity.Player;
 import tv.quaint.storage.resources.flat.simple.SimpleConfiguration;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 public class MainConfig extends SimpleConfiguration {
     public MainConfig() {
-        super("config.yml", FlyingAllowed.getInstance(), false);
+        super("config.yml", FlyingAllowed.getInstance(), true);
     }
 
     @Override
@@ -25,7 +26,7 @@ public class MainConfig extends SimpleConfiguration {
     public boolean getAutoToggleOnEnabled() {
         reloadResource();
 
-        return getOrSetDefault("toggle.on.auto.enabled", false);
+        return getOrSetDefault("toggle.on.auto.enabled", true);
     }
 
     public String getAutoToggleOnBypassPerm() {
@@ -98,5 +99,25 @@ public class MainConfig extends SimpleConfiguration {
 
     public boolean isBypassing(Player player) {
         return isBypassing(player.getUniqueId().toString());
+    }
+
+    public static List<String> getGPClaimExtentsAllowedDefault() {
+        return new ArrayList<>(List.of("Access", "Build"));
+    }
+
+    public ConcurrentSkipListSet<String> getGPClaimExtentsAllowed() {
+        reloadResource();
+
+        return new ConcurrentSkipListSet<>(getOrSetDefault("specific.grief-prevention.claim-extents.allowed", getGPClaimExtentsAllowedDefault()));
+    }
+
+    public static List<String> getHCClaimExtentsAllowedDefault() {
+        return new ArrayList<>(List.of("BLOCK_PLACE"));
+    }
+
+    public ConcurrentSkipListSet<String> getHCClaimExtentsAllowed() {
+        reloadResource();
+
+        return new ConcurrentSkipListSet<>(getOrSetDefault("specific.husk-claims.claim-extents.allowed", getHCClaimExtentsAllowedDefault()));
     }
 }

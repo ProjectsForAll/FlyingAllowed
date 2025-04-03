@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
+import tv.quaint.objects.SingleSet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +56,7 @@ public class PlayerMoveData {
 
         int iterations = 0;
         while (isTopable(topLocation)) {
-            topLocation = topLocation.add(0, -1, 0);
+            topLocation = topLocation.subtract(0, 1, 0);
 
             iterations ++;
         }
@@ -103,50 +104,15 @@ public class PlayerMoveData {
         if (gameMode == GameMode.CREATIVE || gameMode == GameMode.SPECTATOR) return;
 
         try {
-            if (CompatManager.isLandsEnabled()) {
-                FlightAbility ability = CompatManager.getLandsHolder().isFlyableAtLocation(this);
+            SingleSet<FlightAbility, FlightExtent> set = CompatManager.getFlyingAllowed(this);
 
-                if (ability == FlightAbility.ABLE_TO_FLY || ability == FlightAbility.UNABLE_TO_FLY) {
-                    if (player.hasPermission(FlyingAllowed.getMainConfig().getLandsToggleOnPerm())) {
-                        if (checkFlyAndIsHandled(ability, FlightExtent.LANDS, FlightFlag.TOGGLE_ALLOWED)) return;
-                    } else if (checkFlyAndIsHandled(ability, FlightExtent.LANDS)) return;
-                }
-            }
-            if (CompatManager.isGriefPreventionEnabled()) {
-                FlightAbility ability = CompatManager.getGriefPreventionHolder().isFlyableAtLocation(this);
+            FlightAbility ability = set.getKey();
+            FlightExtent extent = set.getValue();
 
-                if (ability == FlightAbility.ABLE_TO_FLY || ability == FlightAbility.UNABLE_TO_FLY) {
-                    if (player.hasPermission(FlyingAllowed.getMainConfig().getLandsToggleOnPerm())) {
-                        if (checkFlyAndIsHandled(ability, FlightExtent.GRIEF_PREVENTION, FlightFlag.TOGGLE_ALLOWED)) return;
-                    } else if (checkFlyAndIsHandled(ability, FlightExtent.GRIEF_PREVENTION)) return;
-                }
-            }
-            if (CompatManager.isKingdomsEnabled()) {
-                FlightAbility ability = CompatManager.getKingdomsHolder().isFlyableAtLocation(this);
-
-                if (ability == FlightAbility.ABLE_TO_FLY || ability == FlightAbility.UNABLE_TO_FLY) {
-                    if (player.hasPermission(FlyingAllowed.getMainConfig().getLandsToggleOnPerm())) {
-                        if (checkFlyAndIsHandled(ability, FlightExtent.KINGDOMSX, FlightFlag.TOGGLE_ALLOWED)) return;
-                    } else if (checkFlyAndIsHandled(ability, FlightExtent.KINGDOMSX)) return;
-                }
-            }
-            if (CompatManager.isSSEnabled()) {
-                FlightAbility ability = CompatManager.getSSHolder().isFlyableAtLocation(this);
-
-                if (ability == FlightAbility.ABLE_TO_FLY || ability == FlightAbility.UNABLE_TO_FLY) {
-                    if (player.hasPermission(FlyingAllowed.getMainConfig().getLandsToggleOnPerm())) {
-                        if (checkFlyAndIsHandled(ability, FlightExtent.SUPERIOR_SKYBLOCK, FlightFlag.TOGGLE_ALLOWED)) return;
-                    } else if (checkFlyAndIsHandled(ability, FlightExtent.SUPERIOR_SKYBLOCK)) return;
-                }
-            }
-            if (CompatManager.isPStonesEnabled()) {
-                FlightAbility ability = CompatManager.getPStonesHolder().isFlyableAtLocation(this);
-
-                if (ability == FlightAbility.ABLE_TO_FLY || ability == FlightAbility.UNABLE_TO_FLY) {
-                    if (player.hasPermission(FlyingAllowed.getMainConfig().getLandsToggleOnPerm())) {
-                        if (checkFlyAndIsHandled(ability, FlightExtent.PROTECTION_STONES, FlightFlag.TOGGLE_ALLOWED)) return;
-                    } else if (checkFlyAndIsHandled(ability, FlightExtent.PROTECTION_STONES)) return;
-                }
+            if (ability == FlightAbility.ABLE_TO_FLY || ability == FlightAbility.UNABLE_TO_FLY || ability == FlightAbility.NO_CLAIM) {
+                if (player.hasPermission(FlyingAllowed.getMainConfig().getLandsToggleOnPerm())) {
+                    if (checkFlyAndIsHandled(ability, extent, FlightFlag.TOGGLE_ALLOWED)) return;
+                } else if (checkFlyAndIsHandled(ability, extent)) return;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -160,7 +126,7 @@ public class PlayerMoveData {
         } else if (player.getAllowFlight() && ! hasPermission() && checkBypassPermissionOff() && checkSoftBypassPermissionOff()) {
             player.setFlying(false);
             player.setAllowFlight(false);
-            player.teleport(getTopLocation());
+            teleportTopLocation();
 
             Sender sender = new Sender(player);
             sender.sendMessage("&eToggling &bflight &coff &eas you &cdo not have &epermission to &dfly &ein this &bworld&8!");
@@ -190,11 +156,11 @@ public class PlayerMoveData {
                 }
             }
             return true;
-        } else if (ability == FlightAbility.UNABLE_TO_FLY) {
+        } else if (ability == FlightAbility.UNABLE_TO_FLY || ability == FlightAbility.NO_CLAIM) {
             if (player.getAllowFlight() && checkBypassPermissionOff() && checkSoftBypassPermissionOff()) {
                 player.setFlying(false);
                 player.setAllowFlight(false);
-                player.teleport(getTopLocation());
+                teleportTopLocation();
 
                 Sender sender = new Sender(player);
                 sender.sendMessage("&eToggling &bflight &coff &eas you are &cunable to &dfly &ein this &bclaim&8!");
@@ -203,5 +169,17 @@ public class PlayerMoveData {
         }
 
         return false;
+    }
+
+    public void teleportTopLocation() {
+        try {
+            player.teleport(getTopLocation());
+        } catch (Exception e) {
+            try {
+                player.teleportAsync(getTopLocation());
+            } catch (Exception e2) {
+                FlyingAllowed.getInstance().logWarningWithInfo("Unable to teleport player due to exception: " + e2.getMessage(), e2);
+            }
+        }
     }
 }

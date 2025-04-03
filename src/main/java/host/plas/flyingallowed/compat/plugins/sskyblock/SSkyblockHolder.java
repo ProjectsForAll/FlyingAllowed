@@ -7,15 +7,18 @@ import com.bgsoftware.superiorskyblock.api.island.Island;
 import com.bgsoftware.superiorskyblock.api.island.PlayerRole;
 import host.plas.bou.compat.ApiHolder;
 import host.plas.flyingallowed.compat.CompatManager;
+import host.plas.flyingallowed.compat.plugins.FlyingHolder;
 import host.plas.flyingallowed.data.FlightAbility;
+import host.plas.flyingallowed.data.FlightExtent;
 import host.plas.flyingallowed.data.PlayerMoveData;
 import org.bukkit.entity.Player;
 
-public class SSkyblockHolder extends ApiHolder<SuperiorSkyblock> {
+public class SSkyblockHolder extends FlyingHolder<SuperiorSkyblock> {
     public SSkyblockHolder() {
-        super(CompatManager.SS_IDENTIFIER, (v) -> SuperiorSkyblockAPI.getSuperiorSkyblock());
+        super(CompatManager.SS_IDENTIFIER, (v) -> SuperiorSkyblockAPI.getSuperiorSkyblock(), FlightExtent.SUPERIOR_SKYBLOCK);
     }
 
+    @Override
     public FlightAbility isFlyableAtLocation(PlayerMoveData moveData) {
         if (! isEnabled()) return FlightAbility.NO_API;
 

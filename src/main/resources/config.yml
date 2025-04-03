@@ -1,0 +1,64 @@
+# Settings for toggling flight.
+toggle:
+  # Setting for toggling flight off.
+  off:
+    # Setting for toggling flight off automatically.
+    auto:
+      # Setting to bypass permission check for toggling off.
+      # If a player has this permission node and they reach
+      # a state where their flight should be toggled off,
+      # it will NOT be toggled off.
+      bypass-perm: flyingallowed.bypass.toggle-off
+      # If enabled, automatic toggling off will be enabled.
+      enabled: true
+  # Setting for toggling flight on.
+  on:
+    # Setting for toggling flight on automatically.
+    auto:
+      # Setting to bypass permission check for toggling on.
+      # If a player has this permission node and they reach
+      # a state where their flight should be toggled on,
+      # it will NOT be toggled on.
+      bypass-perm: flyingallowed.bypass.toggle-on
+      # If enabled, automatic toggling on will be enabled.
+      enabled: true
+    # Setting for toggling flight on inside claims.
+    lands:
+      # Permission node needed to toggle flight on
+      # inside claims. This is the permission node
+      # players need to have in order for their flight
+      # to be automatically toggled on inside claims.
+      # NOTE:
+      # Their flight will only be toggled on when
+      # they meet certain criteria. For example, if
+      # they own the claim, or are a member of the
+      # claim, or have the FLY extent in the claim.
+      # FLY extent is a Lands (plugin) feature.
+      perm: flyingallowed.lands.toggle-on
+
+# Plugin specific settings.
+specific:
+  # Settings for the GriefPrevention plugin.
+  grief-prevention:
+    # Claim extents...
+    claim-extents:
+      # List of claim extents that are allowed for flight (in a player's claim).
+      # Options:
+      # ANY -> All claim extents are allowed.
+      # Access
+      # Build
+      # Edit
+      # Inventory
+      # Manage
+      allowed:
+        - ANY
+  # Settings for the HuskClaims plugin.
+  husk-claims:
+    # Claim extents...
+    claim-extents:
+      # List of claim extents that are allowed for flight (in a player's claim).
+      # Options:
+      # BLOCK_PLACE
+      # ...
+      allowed:
+      - BLOCK_PLACE

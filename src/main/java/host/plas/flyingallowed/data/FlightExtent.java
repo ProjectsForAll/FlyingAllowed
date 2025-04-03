@@ -6,5 +6,8 @@ public enum FlightExtent {
     KINGDOMSX,
     SUPERIOR_SKYBLOCK,
     PROTECTION_STONES,
+    WORLDGUARD,
+    HUSK_CLAIMS,
+    NONE,
     ;
 }

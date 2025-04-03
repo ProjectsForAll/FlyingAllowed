@@ -5,9 +5,12 @@ authors: [ Drak ]
 depend:
   - BukkitOfUtils
 softdepend:
-  - Lands
   - PlaceholderAPI
+  - Lands
   - GriefPrevention
+  - ProtectionStones
+  - SuperiorSkyblock2
+  - KingdomsX
 folia-supported: true
 
 commands:

@@ -1,7 +1,9 @@
 package host.plas.flyingallowed.compat.plugins.kingdoms;
 
 import host.plas.bou.compat.ApiHolder;
+import host.plas.flyingallowed.compat.plugins.FlyingHolder;
 import host.plas.flyingallowed.data.FlightAbility;
+import host.plas.flyingallowed.data.FlightExtent;
 import host.plas.flyingallowed.data.PlayerMoveData;
 import org.bukkit.entity.Player;
 import org.kingdoms.constants.group.Kingdom;
@@ -11,11 +13,12 @@ import org.kingdoms.main.Kingdoms;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class KingdomsHolder extends ApiHolder<Kingdoms> {
+public class KingdomsHolder extends FlyingHolder<Kingdoms> {
     public KingdomsHolder() {
-        super("kingdoms", (v) -> Kingdoms.get());
+        super("kingdoms", (v) -> Kingdoms.get(), FlightExtent.KINGDOMSX);
     }
 
+    @Override
     public FlightAbility isFlyableAtLocation(PlayerMoveData moveData) {
         if (! isEnabled()) return FlightAbility.NO_API;
 

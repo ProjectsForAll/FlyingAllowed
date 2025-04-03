@@ -1,20 +1,22 @@
 package host.plas.flyingallowed.compat.plugins.lands;
 
-import host.plas.bou.compat.ApiHolder;
 import host.plas.flyingallowed.FlyingAllowed;
 import host.plas.flyingallowed.compat.CompatManager;
+import host.plas.flyingallowed.compat.plugins.FlyingHolder;
 import host.plas.flyingallowed.data.FlightAbility;
+import host.plas.flyingallowed.data.FlightExtent;
 import host.plas.flyingallowed.data.PlayerMoveData;
 import me.angeschossen.lands.api.LandsIntegration;
 import me.angeschossen.lands.api.land.Land;
 import me.angeschossen.lands.api.land.LandWorld;
 import org.bukkit.Chunk;
 
-public class LandsHolder extends ApiHolder<LandsIntegration> {
+public class LandsHolder extends FlyingHolder<LandsIntegration> {
     public LandsHolder() {
-        super(CompatManager.LANDS_IDENTIFIER, (v) -> LandsIntegration.of(FlyingAllowed.getInstance()));
+        super(CompatManager.LANDS_IDENTIFIER, (v) -> LandsIntegration.of(FlyingAllowed.getInstance()), FlightExtent.LANDS);
     }
 
+    @Override
     public FlightAbility isFlyableAtLocation(PlayerMoveData moveData) {
         if (! isEnabled()) return FlightAbility.NO_API;
 

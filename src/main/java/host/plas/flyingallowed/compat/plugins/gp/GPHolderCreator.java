@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 
 public class GPHolderCreator implements Supplier<ApiHolder<?>> {
     @Override
-    public GriefPreventionHolder get() {
-        return new GriefPreventionHolder();
+    public GPHolder get() {
+        return new GPHolder();
     }
 }
