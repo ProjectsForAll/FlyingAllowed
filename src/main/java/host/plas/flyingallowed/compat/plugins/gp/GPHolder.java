@@ -27,7 +27,7 @@ public class GPHolder extends FlyingHolder<GriefPrevention> {
         Claim claim = api().dataStore.getClaimAt(moveData.getTo(), true, null);
 
         if (claim != null) {
-            if (moveData.getPlayer().hasPermission("flyingallowed.in.claims")) {
+            if (moveData.hasFlyInClaimPermission()) {
                 if (claim.getOwnerID().equals(moveData.getPlayer().getUniqueId()) || checkClaimExtents(moveData.getPlayer(), claim)) {
                     return FlightAbility.ABLE_TO_FLY;
                 } else {
@@ -37,7 +37,7 @@ public class GPHolder extends FlyingHolder<GriefPrevention> {
                 return FlightAbility.UNABLE_TO_FLY;
             }
         } else {
-            if (moveData.getPlayer().hasPermission("flyingallowed.in.claims")) {
+            if (moveData.hasFlyInClaimPermission()) {
                 return FlightAbility.NO_CLAIM;
             } else {
                 return FlightAbility.UNABLE_TO_FLY;

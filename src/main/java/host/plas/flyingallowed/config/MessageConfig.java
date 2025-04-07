@@ -46,13 +46,13 @@ public class MessageConfig extends SimpleConfiguration {
     public String getToggleOnClaimMessage() {
         reloadResource();
 
-        return getOrSetDefault("toggle.on.world.message", "&eToggling &bflight &aon &eas you are &aable to &dfly &ein this &bclaim&8!");
+        return getOrSetDefault("toggle.on.claim.message", "&eToggling &bflight &aon &eas you are &aable to &dfly &ein this &bclaim&8!");
     }
 
     public String getToggleOffClaimMessage() {
         reloadResource();
 
-        return getOrSetDefault("toggle.off.world.message", "&eToggling &bflight &coff &eas you are &cunable to &dfly &ein this &bclaim&8!");
+        return getOrSetDefault("toggle.off.claim.message", "&eToggling &bflight &coff &eas you are &cunable to &dfly &ein this &bclaim&8!");
     }
 
     public String getPlaceholderEnabled() {

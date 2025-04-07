@@ -75,14 +75,14 @@ public class WGHolder extends FlyingHolder<WorldGuardPlugin> {
         }
 
         if (regionSet.size() > 0) {
-            if (moveData.getPlayer().hasPermission("flyingallowed.in.regions")) {
+            if (moveData.hasFlyInRegionPermission()) {
                 if (checkClaimExtents(player, regionSet)) {
                     return FlightAbility.ABLE_TO_FLY;
                 } else {
                     return FlightAbility.UNABLE_TO_FLY;
                 }
             }
-            if (moveData.getPlayer().hasPermission("flyingallowed.in.claims")) {
+            if (moveData.hasFlyInClaimPermission()) {
                 if (regionSet.isOwnerOfAll(player) || regionSet.isMemberOfAll(player)) {
                     return FlightAbility.ABLE_TO_FLY;
                 } else {
@@ -91,7 +91,7 @@ public class WGHolder extends FlyingHolder<WorldGuardPlugin> {
             }
             return FlightAbility.UNABLE_TO_FLY;
         } else {
-            if (moveData.getPlayer().hasPermission("flyingallowed.in.claims")) {
+            if (moveData.hasFlyInClaimPermission()) {
                 return FlightAbility.NO_CLAIM;
             } else {
                 return FlightAbility.UNABLE_TO_FLY;

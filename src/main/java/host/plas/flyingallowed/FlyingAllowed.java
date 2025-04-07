@@ -52,6 +52,7 @@ public final class FlyingAllowed extends BetterPlugin {
         setInstance(this);
 
         setMainConfig(new MainConfig());
+        setMessageConfig(new MessageConfig());
 
         setFlightWorlds(new FlightWorlds());
 

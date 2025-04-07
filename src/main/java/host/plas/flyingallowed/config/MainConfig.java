@@ -24,6 +24,9 @@ public class MainConfig extends SimpleConfiguration {
         getSoftBypassingPerm();
         getCurrentSoftBypassingPlayers();
 
+        getFlyInClaimsPermission();
+        getFlyInRegionsPermission();
+
         getGPClaimExtentsAllowed();
         getHCClaimExtentsAllowed();
     }
@@ -62,6 +65,18 @@ public class MainConfig extends SimpleConfiguration {
         reloadResource();
 
         return getOrSetDefault("bypassing.soft.permission", "flyingallowed.bypass.soft");
+    }
+
+    public String getFlyInClaimsPermission() {
+        reloadResource();
+
+        return getOrSetDefault("general.flying.in-claims.permission", "flyingallowed.in.claims");
+    }
+
+    public String getFlyInRegionsPermission() {
+        reloadResource();
+
+        return getOrSetDefault("general.flying.in-regions.permission", "flyingallowed.in.regions");
     }
 
     public ConcurrentSkipListSet<String> getCurrentSoftBypassingPlayers() {

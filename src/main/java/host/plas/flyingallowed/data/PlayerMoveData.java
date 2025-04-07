@@ -15,6 +15,7 @@ import tv.quaint.objects.SingleSet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 @Getter @Setter
 public class PlayerMoveData {
@@ -181,5 +182,18 @@ public class PlayerMoveData {
                 FlyingAllowed.getInstance().logWarningWithInfo("Unable to teleport player due to exception: " + e2.getMessage(), e2);
             }
         }
+    }
+
+    public boolean hasPermission(String permission) {
+        return player.hasPermission(permission);
+    }
+
+    public boolean hasFlyInClaimPermission() {
+        return hasPermission(FlyingAllowed.getMainConfig().getFlyInClaimsPermission()) ||
+                hasPermission("flyingallowed.in.lands"); // For old versions of FlyingAllowed
+    }
+
+    public boolean hasFlyInRegionPermission() {
+        return hasPermission(FlyingAllowed.getMainConfig().getFlyInRegionsPermission());
     }
 }
