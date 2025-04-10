@@ -96,11 +96,20 @@ public class CompatManager {
         HeldHolder wgHolder = new EmptyHolder(WG_IDENTIFIER);
         try {
             wgHolder = new WGHeld();
-            FlyingAllowed.getInstance().logInfo("HuskClaims found, enabling...");
+            FlyingAllowed.getInstance().logInfo("WorldGuard found, enabling...");
         } catch (Throwable e) {
-            FlyingAllowed.getInstance().logInfo("HuskClaims not found, skipping...");
+            FlyingAllowed.getInstance().logInfo("WorldGuard not found, skipping...");
         }
         putHolder(WG_IDENTIFIER, wgHolder);
+    }
+
+    public static void onDisable() {
+        for (HeldHolder holder : host.plas.bou.compat.CompatManager.getHolders().values()) {
+            if (holder.getHolder() instanceof FlyingHolder) {
+                FlyingHolder<?> flyingHolder = (FlyingHolder<?>) holder.getHolder();
+                host.plas.bou.compat.CompatManager.unregisterHolder(flyingHolder.getIdentifier());
+            }
+        }
     }
 
     public static void putHolder(String identifier, HeldHolder holder) {

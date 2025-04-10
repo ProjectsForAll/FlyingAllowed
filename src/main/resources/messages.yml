@@ -4,11 +4,15 @@ toggle:
       message: "&eToggling &bflight &aon &eas you &ahave &epermission to &dfly &ein this &bworld&8!"
     claim:
       message: "&eToggling &bflight &aon &eas you are &aable to &dfly &ein this &bclaim&8!"
+    region:
+      message: "&eToggling &bflight &aon &eas you are &aable to &dfly &ein this &bregion&8!"
   off:
     world:
       message: "&eToggling &bflight &coff &eas you &cdo not have &epermission to &dfly &ein this &bworld&8!"
     claim:
       message: "&eToggling &bflight &coff &eas you are &cunable to &dfly &ein this &bclaim&8!"
+    region:
+      message: "&eToggling &bflight &coff &eas you are &cunable to &dfly &ein this &bregion&8!"
 
 placeholders:
   enabled: "&aenabled"

@@ -21,6 +21,9 @@ public class MessageConfig extends SimpleConfiguration {
         getToggleOnClaimMessage();
         getToggleOffClaimMessage();
 
+        getToggleOnRegionMessage();
+        getToggleOffRegionMessage();
+
         getPlaceholderEnabled();
         getPlaceholderDisabled();
 
@@ -49,10 +52,22 @@ public class MessageConfig extends SimpleConfiguration {
         return getOrSetDefault("toggle.on.claim.message", "&eToggling &bflight &aon &eas you are &aable to &dfly &ein this &bclaim&8!");
     }
 
+    public String getToggleOnRegionMessage() {
+        reloadResource();
+
+        return getOrSetDefault("toggle.on.region.message", "&eToggling &bflight &aon &eas you are &aable to &dfly &ein this &bregion&8!");
+    }
+
     public String getToggleOffClaimMessage() {
         reloadResource();
 
         return getOrSetDefault("toggle.off.claim.message", "&eToggling &bflight &coff &eas you are &cunable to &dfly &ein this &bclaim&8!");
+    }
+
+    public String getToggleOffRegionMessage() {
+        reloadResource();
+
+        return getOrSetDefault("toggle.off.region.message", "&eToggling &bflight &coff &eas you are &cunable to &dfly &ein this &bregion&8!");
     }
 
     public String getPlaceholderEnabled() {

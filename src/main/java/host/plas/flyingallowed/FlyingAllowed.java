@@ -40,8 +40,10 @@ public final class FlyingAllowed extends BetterPlugin {
 
     @Override
     public void onBaseLoad() {
+        setInstance(this);
+
         if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null) {
-            getLogger().info("WorldGuard found, registering flag...");
+            logInfo("WorldGuard found, registering region flag...");
             WGHolder.registerFlightFlag();
         }
     }
@@ -49,8 +51,6 @@ public final class FlyingAllowed extends BetterPlugin {
     @Override
     public void onBaseEnabled() {
         // Plugin startup logic
-        setInstance(this);
-
         setMainConfig(new MainConfig());
         setMessageConfig(new MessageConfig());
 
@@ -67,5 +67,7 @@ public final class FlyingAllowed extends BetterPlugin {
     public void onBaseDisable() {
         // Plugin shutdown logic
         getFlightWorlds().unregister();
+
+        CompatManager.onDisable();
     }
 }

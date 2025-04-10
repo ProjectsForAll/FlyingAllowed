@@ -36,11 +36,17 @@ toggle:
       # FLY extent is a Lands (plugin) feature.
       perm: flyingallowed.lands.toggle-on
 
+# General setting for the plugin.
 general:
+  # Settings regarding flying.
   flying:
+    # Settings regarding flying in claims.
     in-claims:
+      # The permission node needed to fly in claims.
       permission: flyingallowed.in.claims
+    # Settings regarding flying in regions.
     in-regions:
+      # The permission node needed to fly in regions.
       permission: flyingallowed.in.regions
 
 # Plugin specific settings.

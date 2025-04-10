@@ -150,21 +150,33 @@ public class PlayerMoveData {
         if (ability == FlightAbility.ABLE_TO_FLY) {
             if (flags.contains(FlightFlag.TOGGLE_ALLOWED)) {
                 if (! player.getAllowFlight() && checkBypassPermissionOn() && checkSoftBypassPermissionOn()) {
+                    FlyingAllowed.getInstance().logDebug("Toggling flight on for " + player.getName() + " by extent: " + extent.name());
+
                     player.setAllowFlight(true);
 
                     Sender sender = new Sender(player);
-                    sender.sendMessage(FlyingAllowed.getMessageConfig().getToggleOnClaimMessage());
+                    if (extent == FlightExtent.WORLDGUARD) {
+                        sender.sendMessage(FlyingAllowed.getMessageConfig().getToggleOnRegionMessage());
+                    } else {
+                        sender.sendMessage(FlyingAllowed.getMessageConfig().getToggleOnClaimMessage());
+                    }
                 }
             }
             return true;
         } else if (ability == FlightAbility.UNABLE_TO_FLY || ability == FlightAbility.NO_CLAIM) {
             if (player.getAllowFlight() && checkBypassPermissionOff() && checkSoftBypassPermissionOff()) {
+                FlyingAllowed.getInstance().logDebug("Toggling flight off for " + player.getName() + " by extent: " + extent.name());
+
                 player.setFlying(false);
                 player.setAllowFlight(false);
                 teleportTopLocation();
 
                 Sender sender = new Sender(player);
-                sender.sendMessage(FlyingAllowed.getMessageConfig().getToggleOffClaimMessage());
+                if (extent == FlightExtent.WORLDGUARD) {
+                    sender.sendMessage(FlyingAllowed.getMessageConfig().getToggleOffRegionMessage());
+                } else {
+                    sender.sendMessage(FlyingAllowed.getMessageConfig().getToggleOffClaimMessage());
+                }
             }
             return true;
         }

@@ -1,13 +1,10 @@
 package host.plas.flyingallowed.compat.plugins.wg;
 
-import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
-import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.internal.platform.WorldGuardPlatform;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.StateFlag;
@@ -36,19 +33,47 @@ public class WGHolder extends FlyingHolder<WorldGuardPlugin> {
 
     public static void registerFlightFlag() {
         FlagRegistry registry = WorldGuard.getInstance().getFlagRegistry();
-        try {
-            StateFlag flag = new StateFlag(FLIGHT_FLAG_NAME, false);
-            registry.register(flag);
 
-            setFlightFlag(flag);
-        } catch (FlagConflictException e) {
-            FlyingAllowed.getInstance().logWarning("WorldGuard flight flag already registered, using existing flag.");
+        try {
+            try {
+                StateFlag flag = new StateFlag(FLIGHT_FLAG_NAME, false);
+                registry.register(flag);
+
+                setFlightFlag(flag);
+            } catch (FlagConflictException e) {
+                FlyingAllowed.getInstance().logWarning("WorldGuard flight flag already registered, using existing flag.");
+
+                tryGetFlag(registry);
+            }
+        } catch (Throwable e) {
+            FlyingAllowed.getInstance().logWarning("Reload detected... WorldGuard region flight flag may not work (it should).");
+
+            tryGetFlag(registry);
+        }
+    }
+
+    public static void tryGetFlag() {
+        tryGetFlag(null);
+    }
+
+    public static void tryGetFlag(FlagRegistry registry) {
+        if (registry == null) {
+            registry = WorldGuard.getInstance().getFlagRegistry();
+            if (registry == null) {
+                FlyingAllowed.getInstance().logWarning("Failed to get WorldGuard flag registry, flight flag will not work.");
+                return;
+            }
+        }
+
+        try {
             Flag<?> existingFlag = registry.get(FLIGHT_FLAG_NAME);
             if (existingFlag instanceof StateFlag) {
                 setFlightFlag((StateFlag) existingFlag);
             } else {
                 FlyingAllowed.getInstance().logWarning("Existing flag is not a StateFlag, flight flag will not work.");
             }
+        } catch (Throwable e) {
+            FlyingAllowed.getInstance().logWarning("Failed to get existing flag, flight flag will not work.");
         }
     }
 
@@ -106,7 +131,10 @@ public class WGHolder extends FlyingHolder<WorldGuardPlugin> {
         regionSet.forEach(region -> {
             if (fail.get()) return;
 
-            StateFlag.State state = region.getFlag(getFlightFlag());
+            StateFlag flag = getFlightFlag();
+            if (flag == null) return;
+
+            StateFlag.State state = region.getFlag(flag);
             if (state != null) {
                 if (state == StateFlag.State.ALLOW) {
                     allow.set(true);
