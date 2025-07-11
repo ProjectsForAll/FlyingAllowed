@@ -1,5 +1,6 @@
 package host.plas.flyingallowed.compat;
 
+import gg.drak.thebase.objects.SingleSet;
 import host.plas.bou.compat.EmptyHolder;
 import host.plas.bou.compat.HeldHolder;
 import host.plas.flyingallowed.FlyingAllowed;
@@ -23,10 +24,10 @@ import host.plas.flyingallowed.data.FlightExtent;
 import host.plas.flyingallowed.data.PlayerMoveData;
 import lombok.Getter;
 import lombok.Setter;
-import tv.quaint.objects.SingleSet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Getter @Setter
 public class CompatManager {
@@ -183,17 +184,19 @@ public class CompatManager {
     public static SingleSet<FlightAbility, FlightExtent> getFlyingAllowed(PlayerMoveData data) {
         List<SingleSet<FlightAbility, FlightExtent>> list = new ArrayList<>();
 
-        for (HeldHolder holder : host.plas.bou.compat.CompatManager.getHolders().values()) {
-            if (! (holder.getHolder() instanceof FlyingHolder)) continue;
-            FlyingHolder<?> flyingHolder = (FlyingHolder<?>) holder.getHolder();
+        host.plas.bou.compat.CompatManager.getHolders().values().stream()
+                .filter(h -> h.getHolder() instanceof FlyingHolder)
+                .forEach(holder -> {
+                    if (! (holder.getHolder() instanceof FlyingHolder)) return;
+                    FlyingHolder<?> flyingHolder = (FlyingHolder<?>) holder.getHolder();
 
-            if (holder.isEnabled()) {
-                SingleSet<FlightAbility, FlightExtent> set = flyingHolder.wrapFlyable(data);
-                if (set != null) {
-                    list.add(set);
-                }
-            }
-        }
+                    if (holder.isEnabled()) {
+                        SingleSet<FlightAbility, FlightExtent> set = flyingHolder.wrapFlyable(data);
+                        if (set != null) {
+                            list.add(set);
+                        }
+                    }
+                });
 
         SingleSet<FlightAbility, FlightExtent> result = new SingleSet<>(FlightAbility.NONE, FlightExtent.NONE);
         for (SingleSet<FlightAbility, FlightExtent> set : list) {

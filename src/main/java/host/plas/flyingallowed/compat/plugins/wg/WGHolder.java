@@ -107,7 +107,7 @@ public class WGHolder extends FlyingHolder<WorldGuardPlugin> {
                     return FlightAbility.UNABLE_TO_FLY;
                 }
             }
-            if (moveData.hasFlyInClaimPermission()) {
+            if (! isDisableOwnerCheck() && moveData.hasFlyInClaimPermission()) {
                 if (regionSet.isOwnerOfAll(player) || regionSet.isMemberOfAll(player)) {
                     return FlightAbility.ABLE_TO_FLY;
                 } else {
@@ -146,5 +146,9 @@ public class WGHolder extends FlyingHolder<WorldGuardPlugin> {
         });
 
         return allow.get() && ! fail.get();
+    }
+
+    public static boolean isDisableOwnerCheck() {
+        return FlyingAllowed.getMainConfig().isWGDisableOwnerCheck();
     }
 }

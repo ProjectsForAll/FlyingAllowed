@@ -1,8 +1,8 @@
 package host.plas.flyingallowed.config;
 
+import gg.drak.thebase.storage.resources.flat.simple.SimpleConfiguration;
 import host.plas.flyingallowed.FlyingAllowed;
 import org.bukkit.entity.Player;
-import tv.quaint.storage.resources.flat.simple.SimpleConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +17,11 @@ public class MainConfig extends SimpleConfiguration {
     public void init() {
         getAutoToggleOnEnabled();
         getAutoToggleOnBypassPerm();
+
         getAutoToggleOffEnabled();
         getAutoToggleOffBypassPerm();
+        getAutoToggleOffTeleportCheckIfOnGround();
+        getAutoToggleOffTeleportMakeInvulnerableTicks();
 
         getLandsToggleOnPerm();
         getSoftBypassingPerm();
@@ -29,6 +32,8 @@ public class MainConfig extends SimpleConfiguration {
 
         getGPClaimExtentsAllowed();
         getHCClaimExtentsAllowed();
+
+        isWGDisableOwnerCheck();
     }
 
     public boolean getAutoToggleOnEnabled() {
@@ -47,6 +52,18 @@ public class MainConfig extends SimpleConfiguration {
         reloadResource();
 
         return getOrSetDefault("toggle.off.auto.enabled", true);
+    }
+
+    public boolean getAutoToggleOffTeleportCheckIfOnGround() {
+        reloadResource();
+
+        return getOrSetDefault("toggle.off.auto.teleport.check-if-on-ground", true);
+    }
+
+    public long getAutoToggleOffTeleportMakeInvulnerableTicks() {
+        reloadResource();
+
+        return getOrSetDefault("toggle.off.auto.teleport.make-invulnerable", 10);
     }
 
     public String getAutoToggleOffBypassPerm() {
@@ -139,5 +156,11 @@ public class MainConfig extends SimpleConfiguration {
         reloadResource();
 
         return new ConcurrentSkipListSet<>(getOrSetDefault("specific.husk-claims.claim-extents.allowed", getHCClaimExtentsAllowedDefault()));
+    }
+
+    public boolean isWGDisableOwnerCheck() {
+        reloadResource();
+
+        return getOrSetDefault("specific.disable.owner-check", true);
     }
 }

@@ -1,6 +1,8 @@
 package host.plas.flyingallowed.data;
 
+import gg.drak.thebase.objects.SingleSet;
 import host.plas.bou.commands.Sender;
+import host.plas.bou.scheduling.TaskManager;
 import host.plas.flyingallowed.FlyingAllowed;
 import host.plas.flyingallowed.compat.*;
 import lombok.Getter;
@@ -11,11 +13,10 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
-import tv.quaint.objects.SingleSet;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentSkipListSet;
 
 @Getter @Setter
 public class PlayerMoveData {
@@ -150,8 +151,6 @@ public class PlayerMoveData {
         if (ability == FlightAbility.ABLE_TO_FLY) {
             if (flags.contains(FlightFlag.TOGGLE_ALLOWED)) {
                 if (! player.getAllowFlight() && checkBypassPermissionOn() && checkSoftBypassPermissionOn()) {
-                    FlyingAllowed.getInstance().logDebug("Toggling flight on for " + player.getName() + " by extent: " + extent.name());
-
                     player.setAllowFlight(true);
 
                     Sender sender = new Sender(player);
@@ -165,8 +164,6 @@ public class PlayerMoveData {
             return true;
         } else if (ability == FlightAbility.UNABLE_TO_FLY || ability == FlightAbility.NO_CLAIM) {
             if (player.getAllowFlight() && checkBypassPermissionOff() && checkSoftBypassPermissionOff()) {
-                FlyingAllowed.getInstance().logDebug("Toggling flight off for " + player.getName() + " by extent: " + extent.name());
-
                 player.setFlying(false);
                 player.setAllowFlight(false);
                 teleportTopLocation();
@@ -185,14 +182,51 @@ public class PlayerMoveData {
     }
 
     public void teleportTopLocation() {
-        try {
-            player.teleport(getTopLocation());
-        } catch (Exception e) {
-            try {
-                player.teleportAsync(getTopLocation());
-            } catch (Exception e2) {
-                FlyingAllowed.getInstance().logWarningWithInfo("Unable to teleport player due to exception: " + e2.getMessage(), e2);
-            }
+        if (getIsShouldTeleport()) {
+            TaskManager.teleport(player, getTopLocation());
+
+            setYVelocity0();
+
+            setInvulnerableForTicks();
+        }
+    }
+
+    public boolean getIsShouldTeleport() {
+        if (player.isGliding()) return false;
+
+        if (FlyingAllowed.getMainConfig().getAutoToggleOffTeleportCheckIfOnGround()) {
+            if (player.isOnGround()) return false;
+        }
+
+        double distance = getDistanceFromTopLocation();
+        if (distance <= 1.5) return false;
+
+        return true;
+    }
+
+    public double getDistanceFromTopLocation() {
+        return getTopLocation().distance(to);
+    }
+
+    public void setYVelocity0() {
+        if (player.isGliding()) return;
+
+        if (to.getY() < from.getY()) {
+            Vector velocity = player.getVelocity().setY(0);
+            player.setVelocity(velocity);
+        }
+    }
+
+    public void setInvulnerableForTicks() {
+        if (player.isGliding()) return;
+
+        long invulnerableTicks = FlyingAllowed.getMainConfig().getAutoToggleOffTeleportMakeInvulnerableTicks();
+        if (invulnerableTicks > 0) {
+            player.setNoDamageTicks((int) invulnerableTicks);
+            player.setInvulnerable(true);
+            TaskManager.runTaskLater(player, () -> {
+                player.setInvulnerable(false);
+            }, invulnerableTicks);
         }
     }
 

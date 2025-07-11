@@ -1,12 +1,7 @@
 package host.plas.flyingallowed.config;
 
+import gg.drak.thebase.storage.resources.flat.simple.SimpleConfiguration;
 import host.plas.flyingallowed.FlyingAllowed;
-import org.bukkit.entity.Player;
-import tv.quaint.storage.resources.flat.simple.SimpleConfiguration;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ConcurrentSkipListSet;
 
 public class MessageConfig extends SimpleConfiguration {
     public MessageConfig() {

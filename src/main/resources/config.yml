@@ -11,6 +11,19 @@ toggle:
       bypass-perm: flyingallowed.bypass.toggle-off
       # If enabled, automatic toggling off will be enabled.
       enabled: true
+    # Settings for teleportation due to toggling flight off.
+    teleport:
+      # Check if player is on the ground before teleporting them.
+      # If the player is not on the ground, they will be teleported.
+      # If they are on the ground, they will not be teleported.
+      # true = Check.
+      # false = Do not check.
+      check-if-on-ground: true
+      # The amount of in-game ticks to make the player invulnerable
+      # for after teleporting them. This is to prevent them from
+      # taking damage from teleportation velocity.
+      # Set to <= 0 to disable this.
+      make-invulnerable: 10
   # Setting for toggling flight on.
   on:
     # Setting for toggling flight on automatically.
@@ -75,3 +88,9 @@ specific:
       # ...
       allowed:
       - BLOCK_PLACE
+  # Settings for the WorldGuard plugin.
+  world-guard:
+    # Disabled features.
+    disable:
+      # Disable the check for if the player owns the WorldGuard region.
+      owner-check: true

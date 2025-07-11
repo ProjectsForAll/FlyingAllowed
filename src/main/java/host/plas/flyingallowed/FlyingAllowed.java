@@ -5,7 +5,6 @@ import host.plas.flyingallowed.commands.BypassCMD;
 import host.plas.flyingallowed.commands.FlyCMD;
 import host.plas.flyingallowed.commands.SetFlyCMD;
 import host.plas.flyingallowed.compat.CompatManager;
-import host.plas.flyingallowed.compat.plugins.wg.WGHeld;
 import host.plas.flyingallowed.compat.plugins.wg.WGHolder;
 import host.plas.flyingallowed.config.MainConfig;
 import host.plas.flyingallowed.config.MessageConfig;

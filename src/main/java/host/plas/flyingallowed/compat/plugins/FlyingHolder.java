@@ -1,18 +1,12 @@
 package host.plas.flyingallowed.compat.plugins;
 
+import gg.drak.thebase.objects.SingleSet;
 import host.plas.bou.compat.ApiHolder;
-import host.plas.flyingallowed.FlyingAllowed;
-import host.plas.flyingallowed.compat.CompatManager;
 import host.plas.flyingallowed.data.FlightAbility;
 import host.plas.flyingallowed.data.FlightExtent;
 import host.plas.flyingallowed.data.PlayerMoveData;
 import lombok.Getter;
 import lombok.Setter;
-import me.angeschossen.lands.api.LandsIntegration;
-import me.angeschossen.lands.api.land.Land;
-import me.angeschossen.lands.api.land.LandWorld;
-import org.bukkit.Chunk;
-import tv.quaint.objects.SingleSet;
 
 import java.util.function.Function;
 

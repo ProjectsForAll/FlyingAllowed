@@ -1,5 +1,6 @@
 package host.plas.flyingallowed.commands;
 
+import gg.drak.thebase.utils.StringUtils;
 import host.plas.bou.commands.CommandArgument;
 import host.plas.bou.commands.CommandContext;
 import host.plas.bou.commands.SimplifiedCommand;
@@ -7,7 +8,6 @@ import host.plas.flyingallowed.FlyingAllowed;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import tv.quaint.utils.StringUtils;
 
 import java.util.Optional;
 import java.util.concurrent.ConcurrentSkipListSet;
