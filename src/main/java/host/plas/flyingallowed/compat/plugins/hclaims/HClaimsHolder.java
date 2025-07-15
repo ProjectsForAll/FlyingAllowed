@@ -90,19 +90,19 @@ public class HClaimsHolder extends FlyingHolder<HuskClaimsAPI> {
     }
 
     public boolean checkClaimExtents(Claim claim, OnlineUser user, Position position) {
-        AtomicBoolean fail = new AtomicBoolean(false);
+        AtomicBoolean pass = new AtomicBoolean(false);
 
         if (claim.isUserBanned(user)) return false;
 
         getConfigAllowedPermissions().forEach(extent -> {
-            if (fail.get()) return;
+            if (pass.get()) return;
 
-            if (! claim.isOperationAllowed(Operation.of(user, extent, position), api().getPlugin())) {
-                fail.set(true);
+            if (claim.isOperationAllowed(Operation.of(user, extent, position), api().getPlugin())) {
+                pass.set(true);
             }
         });
 
-        return ! fail.get();
+        return pass.get();
     }
 
     public static boolean isConfigAllowedPermissionsAny() {

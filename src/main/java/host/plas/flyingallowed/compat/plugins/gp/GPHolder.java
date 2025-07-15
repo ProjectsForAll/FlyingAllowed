@@ -50,20 +50,20 @@ public class GPHolder extends FlyingHolder<GriefPrevention> {
     }
 
     public static boolean checkClaimExtents(Player player, Claim claim) {
-        AtomicBoolean fail = new AtomicBoolean(false);
+        AtomicBoolean pass = new AtomicBoolean(false);
 
         getConfigAllowedPermissions().forEach(extent -> {
-            if (fail.get()) return;
+            if (pass.get()) return;
 
             ClaimPermission permission = claim.getPermission(player.getUniqueId().toString());
-            if (permission == null) {
-                fail.set(true);
-            } else if (permission != extent) {
-                fail.set(true);
+            if (permission != null) {
+                if (permission == extent) {
+                    pass.set(true);
+                }
             }
         });
 
-        return ! fail.get();
+        return pass.get();
     }
 
     public static boolean isConfigAllowedPermissionsAny() {

@@ -93,7 +93,7 @@ public class MainConfig extends SimpleConfiguration {
     public String getFlyInClaimsAllPermission() {
         reloadResource();
 
-        return getOrSetDefault("general.flying.in-claims.permission", "flyingallowed.in.claims.all");
+        return getOrSetDefault("general.flying.in-claims.all-permission", "flyingallowed.in.claims.all");
     }
 
     public String getFlyInRegionsPermission() {
