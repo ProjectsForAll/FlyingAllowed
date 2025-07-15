@@ -242,4 +242,12 @@ public class PlayerMoveData {
     public boolean hasFlyInRegionPermission() {
         return hasPermission(FlyingAllowed.getMainConfig().getFlyInRegionsPermission());
     }
+
+    public static String getAllClaimsPermission() {
+        return FlyingAllowed.getMainConfig().getFlyInClaimsAllPermission();
+    }
+
+    public boolean hasAllClaimsPermission() {
+        return hasPermission(getAllClaimsPermission());
+    }
 }

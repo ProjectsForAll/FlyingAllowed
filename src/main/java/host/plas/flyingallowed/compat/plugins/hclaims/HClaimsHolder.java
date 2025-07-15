@@ -45,6 +45,10 @@ public class HClaimsHolder extends FlyingHolder<HuskClaimsAPI> {
         Claim claim = api().getClaimAt(position).orElse(null);
 
         if (claim != null) {
+            if (moveData.hasAllClaimsPermission()) {
+                return FlightAbility.ABLE_TO_FLY;
+            }
+
             if (moveData.hasFlyInClaimPermission()) {
                 if (claim.getOwner().isPresent() && claim.getOwner().get().equals(moveData.getPlayer().getUniqueId())) {
                     return FlightAbility.ABLE_TO_FLY;

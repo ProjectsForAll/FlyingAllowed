@@ -26,6 +26,10 @@ public class KingdomsHolder extends FlyingHolder<Kingdoms> {
         Land land = Land.getLand(chunkLocation);
 
         if (land != null) {
+            if (moveData.hasAllClaimsPermission()) {
+                return FlightAbility.ABLE_TO_FLY;
+            }
+
             if (moveData.getPlayer().hasPermission("flyingallowed.in.lands")) {
                 Kingdom kingdom = land.getKingdom();
                 if (kingdom == null) {

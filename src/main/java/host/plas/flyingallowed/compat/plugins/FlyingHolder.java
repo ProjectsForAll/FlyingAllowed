@@ -2,6 +2,7 @@ package host.plas.flyingallowed.compat.plugins;
 
 import gg.drak.thebase.objects.SingleSet;
 import host.plas.bou.compat.ApiHolder;
+import host.plas.flyingallowed.FlyingAllowed;
 import host.plas.flyingallowed.data.FlightAbility;
 import host.plas.flyingallowed.data.FlightExtent;
 import host.plas.flyingallowed.data.PlayerMoveData;
@@ -27,4 +28,12 @@ public abstract class FlyingHolder<P> extends ApiHolder<P> {
     }
 
     abstract public FlightAbility isFlyableAtLocation(PlayerMoveData moveData);
+
+    public static String getAllClaimsPermission() {
+        return FlyingAllowed.getMainConfig().getFlyInClaimsAllPermission();
+    }
+
+    public static boolean hasAllClaimsPermission(PlayerMoveData moveData) {
+        return moveData.hasPermission(getAllClaimsPermission());
+    }
 }

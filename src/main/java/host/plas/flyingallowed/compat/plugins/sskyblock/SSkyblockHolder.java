@@ -29,6 +29,10 @@ public class SSkyblockHolder extends FlyingHolder<SuperiorSkyblock> {
         Island island = api().getGrid().getIslandAt(moveData.getTo());
 
         if (island != null) {
+            if (moveData.hasAllClaimsPermission()) {
+                return FlightAbility.ABLE_TO_FLY;
+            }
+
             if (moveData.getPlayer().hasPermission("flyingallowed.in.lands")) {
                 if (isPlayerMemberOfIsland(moveData.getPlayer(), island)) {
                     return FlightAbility.ABLE_TO_FLY;

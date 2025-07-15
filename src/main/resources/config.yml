@@ -57,6 +57,8 @@ general:
     in-claims:
       # The permission node needed to fly in claims.
       permission: flyingallowed.in.claims
+      # The permission to fly in every claim.
+      all-permission: flyingallowed.in.claims.all
     # Settings regarding flying in regions.
     in-regions:
       # The permission node needed to fly in regions.

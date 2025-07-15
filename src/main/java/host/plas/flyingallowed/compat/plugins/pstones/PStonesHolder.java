@@ -31,6 +31,10 @@ public class PStonesHolder extends FlyingHolder<ProtectionStones> {
         PSRegion region = PSRegion.fromLocation(moveData.getTo());
 
         if (region != null) {
+            if (moveData.hasAllClaimsPermission()) {
+                return FlightAbility.ABLE_TO_FLY;
+            }
+
             if (moveData.getPlayer().hasPermission("flyingallowed.in.lands")) {
                 if (canFlyIn(moveData.getPlayer(), region)) {
                     return FlightAbility.ABLE_TO_FLY;

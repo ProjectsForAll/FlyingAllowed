@@ -28,6 +28,10 @@ public class LandsHolder extends FlyingHolder<LandsIntegration> {
         Land land = toLandWorld.getLandByChunk(chunk.getX(), chunk.getZ());
 
         if (land != null) {
+            if (moveData.hasAllClaimsPermission()) {
+                return FlightAbility.ABLE_TO_FLY;
+            }
+
             if (moveData.getPlayer().hasPermission("flyingallowed.in.lands")) {
                 if (land.getOwnerUID().equals(moveData.getPlayer().getUniqueId()) || land.isTrusted(moveData.getPlayer().getUniqueId())) {
                     return FlightAbility.ABLE_TO_FLY;
