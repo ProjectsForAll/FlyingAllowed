@@ -52,6 +52,12 @@ repositories {
 
     // WorldGuard
     maven { url 'https://maven.enginehub.org/repo/' }
+
+    // GriefDefender
+    maven {
+        name = 'griefdefender'
+        url = 'https://repo.glaremasters.me/repository/bloodshot'
+    }
 }
 
 disableAutoTargetJvm()

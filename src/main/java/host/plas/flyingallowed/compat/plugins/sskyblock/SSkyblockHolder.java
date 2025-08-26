@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 
 public class SSkyblockHolder extends FlyingHolder<SuperiorSkyblock> {
     public SSkyblockHolder() {
-        super(CompatManager.SS_IDENTIFIER, (v) -> SuperiorSkyblockAPI.getSuperiorSkyblock(), FlightExtent.SUPERIOR_SKYBLOCK);
+        super(SSkyblockHeld.IDENTIFIER, (v) -> SuperiorSkyblockAPI.getSuperiorSkyblock(), FlightExtent.SUPERIOR_SKYBLOCK);
     }
 
     @Override

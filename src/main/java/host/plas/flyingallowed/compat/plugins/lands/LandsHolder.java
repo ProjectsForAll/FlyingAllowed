@@ -1,7 +1,6 @@
 package host.plas.flyingallowed.compat.plugins.lands;
 
 import host.plas.flyingallowed.FlyingAllowed;
-import host.plas.flyingallowed.compat.CompatManager;
 import host.plas.flyingallowed.compat.plugins.FlyingHolder;
 import host.plas.flyingallowed.data.FlightAbility;
 import host.plas.flyingallowed.data.FlightExtent;
@@ -13,7 +12,7 @@ import org.bukkit.Chunk;
 
 public class LandsHolder extends FlyingHolder<LandsIntegration> {
     public LandsHolder() {
-        super(CompatManager.LANDS_IDENTIFIER, (v) -> LandsIntegration.of(FlyingAllowed.getInstance()), FlightExtent.LANDS);
+        super(LandsHeld.IDENTIFIER, (v) -> LandsIntegration.of(FlyingAllowed.getInstance()), FlightExtent.LANDS);
     }
 
     @Override

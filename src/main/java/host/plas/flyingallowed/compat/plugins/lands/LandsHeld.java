@@ -1,10 +1,11 @@
 package host.plas.flyingallowed.compat.plugins.lands;
 
 import host.plas.bou.compat.HeldHolder;
-import host.plas.flyingallowed.compat.CompatManager;
 
 public class LandsHeld extends HeldHolder {
+    public static String IDENTIFIER = "Lands";
+
     public LandsHeld() {
-        super(CompatManager.LANDS_IDENTIFIER, new LandsHolderCreator());
+        super(IDENTIFIER, new LandsHolderCreator());
     }
 }

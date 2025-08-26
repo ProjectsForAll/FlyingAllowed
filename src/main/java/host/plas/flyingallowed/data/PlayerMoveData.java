@@ -17,6 +17,7 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Getter @Setter
 public class PlayerMoveData {
@@ -102,6 +103,9 @@ public class PlayerMoveData {
     }
 
     public void checkPermission() {
+        Optional<FlightAbility> cached = MoveDataCache.get(player);
+        if (cached.isPresent()) return;
+
         GameMode gameMode = player.getGameMode();
         if (gameMode == GameMode.CREATIVE || gameMode == GameMode.SPECTATOR) return;
 
@@ -110,6 +114,9 @@ public class PlayerMoveData {
 
             FlightAbility ability = set.getKey();
             FlightExtent extent = set.getValue();
+
+            if (MoveDataCache.checkEquals(player, ability)) return; // Before setting.
+            MoveDataCache.cache(getPlayer(), ability);
 
             if (ability == FlightAbility.ABLE_TO_FLY || ability == FlightAbility.UNABLE_TO_FLY || ability == FlightAbility.NO_CLAIM) {
                 if (player.hasPermission(FlyingAllowed.getMainConfig().getLandsToggleOnPerm())) {

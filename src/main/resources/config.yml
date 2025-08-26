@@ -64,6 +64,13 @@ general:
       # The permission node needed to fly in regions.
       permission: flyingallowed.in.regions
 
+# Settings for flight lookups.
+lookups:
+  # Ticks between each lookup.
+  # This is for performance on larger servers.
+  # NOTE: 20 ticks = 1 second.
+  cached-ticks: 5
+
 # Plugin specific settings.
 specific:
   # Settings for the GriefPrevention plugin.

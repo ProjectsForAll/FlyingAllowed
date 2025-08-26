@@ -6,37 +6,25 @@ ext {
     ANNO = [
             'com.github.streamline-essentials:BukkitOfUtils:master-SNAPSHOT',
             'dev.folia:folia-api:1.20.4-R0.1-SNAPSHOT',
-            'net.kyori:adventure-api:4.16.0',
-            'net.kyori:adventure-text-serializer-gson:4.16.0',
-            'net.kyori:adventure-text-serializer-legacy:4.16.0',
-            'net.kyori:adventure-text-serializer-plain:4.16.0',
-            'net.kyori:adventure-text-minimessage:4.16.0',
-            'net.kyori:adventure-text-serializer-ansi:4.16.0',
-            'net.kyori:ansi:1.0.3',
     ]
     COMP_ONLY = [
             'com.github.streamline-essentials:BukkitOfUtils:master-SNAPSHOT',
             'dev.folia:folia-api:1.20.4-R0.1-SNAPSHOT',
-            'net.kyori:adventure-api:4.16.0',
-            'net.kyori:adventure-text-serializer-gson:4.16.0',
-            'net.kyori:adventure-text-serializer-legacy:4.16.0',
-            'net.kyori:adventure-text-serializer-plain:4.16.0',
-            'net.kyori:adventure-text-minimessage:4.16.0',
-            'net.kyori:adventure-text-serializer-ansi:4.16.0',
-            'net.kyori:ansi:1.0.3',
     ]
     FILES = [
+            'libs/griefdefender.jar', // GriefDefender Support
     ]
     OTHER_PLUGINS = [
-            'me.clip:placeholderapi:2.11.6',
-            'com.github.angeschossen:LandsAPI:6.44.0',
-            'com.github.GriefPrevention:GriefPrevention:16.18.2',
-            'com.onarandombox.multiversecore:Multiverse-Core:4.3.1',
-            'com.onarandombox.multiversenetherportals:Multiverse-NetherPortals:4.2.1',
-            'com.github.cryptomorin:kingdoms:1.16.8.1.1',
-            'com.bgsoftware:SuperiorSkyblockAPI:2024.2',
-            'dev.espi:protectionstones:2.10.2',
-            'net.william278.huskclaims:huskclaims-bukkit:1.5.2',
-            'com.sk89q.worldguard:worldguard-bukkit:7.0.13',
+            'me.clip:placeholderapi:2.11.6', // PlaceholderAPI Support
+            'com.github.angeschossen:LandsAPI:6.44.0', // Lands Support
+            'com.github.GriefPrevention:GriefPrevention:16.18.2', // GriefPrevention Support
+            'com.onarandombox.multiversecore:Multiverse-Core:4.3.1', // Multiverse-Core Support
+            'com.onarandombox.multiversenetherportals:Multiverse-NetherPortals:4.2.1', // Multiverse-NetherPortals Support
+            'com.github.cryptomorin:kingdoms:1.16.8.1.1', // KingdomsX Support
+            'com.bgsoftware:SuperiorSkyblockAPI:2024.2', // SuperiorSkyblock2 Support
+            'dev.espi:protectionstones:2.10.2', // ProtectionStones Support
+            'net.william278.huskclaims:huskclaims-bukkit:1.5.2', // HuskClaims Support
+            'com.sk89q.worldguard:worldguard-bukkit:7.0.13', // WorldGuard Support
+//            'com.griefdefender:api:2.1.0-SNAPSHOT', // GriefDefender Support
     ]
 }

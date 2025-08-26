@@ -14,6 +14,7 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import host.plas.flyingallowed.FlyingAllowed;
 import host.plas.flyingallowed.compat.CompatManager;
 import host.plas.flyingallowed.compat.plugins.FlyingHolder;
+import host.plas.flyingallowed.compat.plugins.sskyblock.SSkyblockHeld;
 import host.plas.flyingallowed.data.FlightAbility;
 import host.plas.flyingallowed.data.FlightExtent;
 import host.plas.flyingallowed.data.PlayerMoveData;
@@ -28,7 +29,7 @@ public class WGHolder extends FlyingHolder<WorldGuardPlugin> {
     private static StateFlag flightFlag;
 
     public WGHolder() {
-        super(CompatManager.WG_IDENTIFIER, (v) -> WorldGuardPlugin.inst(), FlightExtent.WORLDGUARD);
+        super(WGHeld.IDENTIFIER, (v) -> WorldGuardPlugin.inst(), FlightExtent.WORLDGUARD);
     }
 
     public static void registerFlightFlag() {

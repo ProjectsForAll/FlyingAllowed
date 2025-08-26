@@ -1,7 +1,6 @@
 package host.plas.flyingallowed.compat.plugins.gp;
 
 import host.plas.flyingallowed.FlyingAllowed;
-import host.plas.flyingallowed.compat.CompatManager;
 import host.plas.flyingallowed.compat.plugins.FlyingHolder;
 import host.plas.flyingallowed.data.FlightAbility;
 import host.plas.flyingallowed.data.FlightExtent;
@@ -17,7 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GPHolder extends FlyingHolder<GriefPrevention> {
     public GPHolder() {
-        super(CompatManager.GRIEF_PREVENTION_IDENTIFIER, (v) -> GriefPrevention.instance, FlightExtent.GRIEF_PREVENTION);
+        super(GPHeld.IDENTIFIER, (v) -> GriefPrevention.instance, FlightExtent.GRIEF_PREVENTION);
     }
 
     @Override

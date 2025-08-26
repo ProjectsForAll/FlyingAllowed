@@ -1,6 +1,5 @@
 package host.plas.flyingallowed.compat.plugins.kingdoms;
 
-import host.plas.bou.compat.ApiHolder;
 import host.plas.flyingallowed.compat.plugins.FlyingHolder;
 import host.plas.flyingallowed.data.FlightAbility;
 import host.plas.flyingallowed.data.FlightExtent;
@@ -15,7 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class KingdomsHolder extends FlyingHolder<Kingdoms> {
     public KingdomsHolder() {
-        super("kingdoms", (v) -> Kingdoms.get(), FlightExtent.KINGDOMSX);
+        super(KingdomsHeld.IDENTIFIER, (v) -> Kingdoms.get(), FlightExtent.KINGDOMSX);
     }
 
     @Override

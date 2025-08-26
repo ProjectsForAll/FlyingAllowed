@@ -5,6 +5,7 @@ import dev.espi.protectionstones.ProtectionStones;
 import host.plas.bou.compat.ApiHolder;
 import host.plas.flyingallowed.compat.CompatManager;
 import host.plas.flyingallowed.compat.plugins.FlyingHolder;
+import host.plas.flyingallowed.compat.plugins.sskyblock.SSkyblockHeld;
 import host.plas.flyingallowed.data.FlightAbility;
 import host.plas.flyingallowed.data.FlightExtent;
 import host.plas.flyingallowed.data.PlayerMoveData;
@@ -16,7 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PStonesHolder extends FlyingHolder<ProtectionStones> {
     public PStonesHolder() {
-        super(CompatManager.PS_IDENTIFIER, (v) -> {
+        super(PStonesHeld.IDENTIFIER, (v) -> {
             Plugin plugin = Bukkit.getPluginManager().getPlugin("ProtectionStones");
             if (plugin == null) return null;
 

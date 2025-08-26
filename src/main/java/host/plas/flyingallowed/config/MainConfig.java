@@ -34,6 +34,8 @@ public class MainConfig extends SimpleConfiguration {
         getHCClaimExtentsAllowed();
 
         isWGDisableOwnerCheck();
+
+        getLookupCachedTicks();
     }
 
     public boolean getAutoToggleOnEnabled() {
@@ -168,5 +170,11 @@ public class MainConfig extends SimpleConfiguration {
         reloadResource();
 
         return getOrSetDefault("specific.disable.owner-check", true);
+    }
+
+    public long getLookupCachedTicks() {
+        reloadResource();
+
+        return getOrSetDefault("lookups.cached-ticks", 5L);
     }
 }

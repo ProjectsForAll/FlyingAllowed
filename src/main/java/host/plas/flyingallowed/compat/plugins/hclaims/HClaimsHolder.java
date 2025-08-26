@@ -3,6 +3,7 @@ package host.plas.flyingallowed.compat.plugins.hclaims;
 import host.plas.flyingallowed.FlyingAllowed;
 import host.plas.flyingallowed.compat.CompatManager;
 import host.plas.flyingallowed.compat.plugins.FlyingHolder;
+import host.plas.flyingallowed.compat.plugins.sskyblock.SSkyblockHeld;
 import host.plas.flyingallowed.data.FlightAbility;
 import host.plas.flyingallowed.data.FlightExtent;
 import host.plas.flyingallowed.data.PlayerMoveData;
@@ -19,7 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class HClaimsHolder extends FlyingHolder<HuskClaimsAPI> {
     public HClaimsHolder() {
-        super(CompatManager.HCLAIMS_IDENTIFIER, (v) -> HuskClaimsAPI.getInstance(), FlightExtent.HUSK_CLAIMS);
+        super(HClaimsHeld.IDENTIFIER, (v) -> HuskClaimsAPI.getInstance(), FlightExtent.HUSK_CLAIMS);
     }
 
     @Override

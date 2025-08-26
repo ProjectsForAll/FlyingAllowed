@@ -1,10 +1,11 @@
 package host.plas.flyingallowed.compat.plugins.sskyblock;
 
 import host.plas.bou.compat.HeldHolder;
-import host.plas.flyingallowed.compat.CompatManager;
 
 public class SSkyblockHeld extends HeldHolder {
+    public static String IDENTIFIER = "SuperiorSkyblock2";
+
     public SSkyblockHeld() {
-        super(CompatManager.SS_IDENTIFIER, new SSkyblockHolderCreator());
+        super(IDENTIFIER, new SSkyblockHolderCreator());
     }
 }
