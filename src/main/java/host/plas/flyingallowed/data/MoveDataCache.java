@@ -1,5 +1,6 @@
 package host.plas.flyingallowed.data;
 
+import host.plas.flyingallowed.timers.CacheTimer;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
@@ -12,6 +13,27 @@ public class MoveDataCache {
     private static ConcurrentSkipListMap<String, FlightAbility> cache = new ConcurrentSkipListMap<>();
     @Getter @Setter
     private static ConcurrentSkipListMap<String, FlightAbility> cacheLong = new ConcurrentSkipListMap<>();
+
+    @Getter @Setter
+    private static CacheTimer timer;
+
+    public static void init() {
+        setTimer(new CacheTimer());
+    }
+
+    public static void onDisable() {
+        if (getTimer() != null) getTimer().cancel();
+
+        setTimer(null);
+
+        flushAll();
+    }
+
+    public static void flushAll() {
+        flush();
+
+        getCacheLong().clear();
+    }
 
     public static void cache(Player player, FlightAbility ability) {
         if (contains(player)) return;

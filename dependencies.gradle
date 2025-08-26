@@ -12,7 +12,7 @@ ext {
             'dev.folia:folia-api:1.20.4-R0.1-SNAPSHOT',
     ]
     FILES = [
-            'libs/griefdefender.jar', // GriefDefender Support
+//            'libs/griefdefender.jar', // GriefDefender Support
     ]
     OTHER_PLUGINS = [
             'me.clip:placeholderapi:2.11.6', // PlaceholderAPI Support
@@ -25,6 +25,6 @@ ext {
             'dev.espi:protectionstones:2.10.2', // ProtectionStones Support
             'net.william278.huskclaims:huskclaims-bukkit:1.5.2', // HuskClaims Support
             'com.sk89q.worldguard:worldguard-bukkit:7.0.13', // WorldGuard Support
-//            'com.griefdefender:api:2.1.0-SNAPSHOT', // GriefDefender Support
+            'com.griefdefender:api:2.1.0-SNAPSHOT', // GriefDefender Support
     ]
 }

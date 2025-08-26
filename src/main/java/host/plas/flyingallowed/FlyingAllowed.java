@@ -9,6 +9,8 @@ import host.plas.flyingallowed.compat.plugins.wg.WGHolder;
 import host.plas.flyingallowed.config.MainConfig;
 import host.plas.flyingallowed.config.MessageConfig;
 import host.plas.flyingallowed.data.FlightWorlds;
+import host.plas.flyingallowed.data.MoveDataCache;
+import host.plas.flyingallowed.timers.CacheTimer;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -60,11 +62,15 @@ public final class FlyingAllowed extends BetterPlugin {
         setBypassCMD(new BypassCMD());
 
         CompatManager.init();
+
+        MoveDataCache.init();
     }
 
     @Override
     public void onBaseDisable() {
         // Plugin shutdown logic
+        MoveDataCache.onDisable();
+
         getFlightWorlds().unregister();
 
         CompatManager.onDisable();
