@@ -1,9 +1,12 @@
 name: '${name}'
 version: '${version}'
 main: '${main}'
+
 authors: [ Drak ]
+
 depend:
   - BukkitOfUtils
+
 softdepend:
   - PlaceholderAPI
   - Lands
@@ -13,6 +16,7 @@ softdepend:
   - KingdomsX
   - HuskClaims
   - WorldGuard
+
 folia-supported: true
 
 commands:
@@ -39,3 +43,9 @@ commands:
       - flybypass
       - flyb
       - flightbypass
+  disabled-flying-worlds:
+    description: Command to manage disabled flying worlds
+    permission: flyingallowed.command.disabled-flying-worlds
+    aliases:
+      - dfw
+      - disabledflyingworlds

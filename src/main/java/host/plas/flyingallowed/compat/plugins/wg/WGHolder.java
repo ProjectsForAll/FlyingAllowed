@@ -68,6 +68,7 @@ public class WGHolder extends FlyingHolder<WorldGuardPlugin> {
 
         try {
             Flag<?> existingFlag = registry.get(FLIGHT_FLAG_NAME);
+
             if (existingFlag instanceof StateFlag) {
                 setFlightFlag((StateFlag) existingFlag);
             } else {

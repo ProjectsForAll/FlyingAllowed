@@ -103,6 +103,8 @@ public class PlayerMoveData {
     }
 
     public void checkPermission() {
+        if (isWorldDisabled()) return;
+
         Optional<FlightAbility> cached = MoveDataCache.get(player);
         if (cached.isPresent()) return;
 
@@ -140,6 +142,14 @@ public class PlayerMoveData {
             Sender sender = new Sender(player);
             sender.sendMessage(FlyingAllowed.getMessageConfig().getToggleOffWorldMessage());
         }
+    }
+
+    public boolean isWorldDisabled() {
+        if (getToWorld() == null) return false; // probably not possible
+
+        String worldName = getToWorld().getName();
+
+        return FlyingAllowed.getWorldConfig().getDisabledWorlds().contains(worldName);
     }
 
     public String getWorldPermission() {
