@@ -12,7 +12,6 @@ import host.plas.flyingallowed.config.MessageConfig;
 import host.plas.flyingallowed.config.WorldConfig;
 import host.plas.flyingallowed.data.FlightWorlds;
 import host.plas.flyingallowed.data.MoveDataCache;
-import host.plas.flyingallowed.timers.CacheTimer;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;

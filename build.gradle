@@ -36,6 +36,11 @@ repositories {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
+    // Streamline Essentials CodeMC Repo
+    maven { url "https://repo.codemc.io/repository/streamline-essentials/" }
+    // CodeMC NMS Repo
+    maven { url "https://repo.codemc.io/repository/nms/" }
+    // JitPack
     maven { url "https://jitpack.io" }
     maven {
         name = "placeholderapi"
@@ -43,7 +48,7 @@ repositories {
     }
     maven { url 'https://repo.papermc.io/repository/maven-snapshots/' }
     maven { url 'https://repo.papermc.io/repository/maven-public/' }
-    maven { url = "https://repo.onarandombox.com/content/groups/public/" }
+    maven { url 'https://repo.onarandombox.com/content/groups/public/' }
     maven { url 'https://repo.bg-software.com/repository/nms/' }
     maven { url 'https://repo.bg-software.com/repository/api/' }
 

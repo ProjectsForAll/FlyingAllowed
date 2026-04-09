@@ -14,6 +14,8 @@ public class WorldConfig extends SimpleConfiguration {
     @Override
     public void init() {
         getDisabledWorlds();
+
+        isWhitelist();
     }
 
     public ConcurrentSkipListSet<String> getDisabledWorlds() {
@@ -36,5 +38,25 @@ public class WorldConfig extends SimpleConfiguration {
         ConcurrentSkipListSet<String> worlds = getDisabledWorlds();
         worlds.remove(world);
         setDisabledWorlds(worlds);
+    }
+
+    public boolean isWhitelist() {
+        reloadResource();
+
+        return getResource().getOrSetDefault("is-whitelist", false);
+    }
+
+    public void setWhitelist(boolean whitelist) {
+        write("is-whitelist", whitelist);
+    }
+
+    public boolean isFullDisable() {
+        reloadResource();
+
+        return getResource().getOrSetDefault("is-full-disable", false);
+    }
+
+    public void setFullDisable(boolean fullDisable) {
+        write("is-full-disable", fullDisable);
     }
 }

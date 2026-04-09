@@ -5,6 +5,7 @@ import host.plas.bou.commands.Sender;
 import host.plas.bou.scheduling.TaskManager;
 import host.plas.flyingallowed.FlyingAllowed;
 import host.plas.flyingallowed.compat.*;
+import host.plas.flyingallowed.config.WorldConfig;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -18,6 +19,7 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 @Getter @Setter
 public class PlayerMoveData {
@@ -103,7 +105,20 @@ public class PlayerMoveData {
     }
 
     public void checkPermission() {
-        if (isWorldDisabled()) return;
+        SingleSet<Boolean, Boolean> ss = isWorldDisabled();
+        boolean worldAllow = ss.getKey();
+        boolean fullDisable = ss.getValue();
+
+        if (! worldAllow) {
+            if (! fullDisable) {
+                return;
+            } else {
+                teleportTopLocation();
+                getPlayer().setFlying(false);
+                getPlayer().setAllowFlight(false);
+                return;
+            }
+        }
 
         Optional<FlightAbility> cached = MoveDataCache.get(player);
         if (cached.isPresent()) return;
@@ -144,12 +159,24 @@ public class PlayerMoveData {
         }
     }
 
-    public boolean isWorldDisabled() {
-        if (getToWorld() == null) return false; // probably not possible
+    public SingleSet<Boolean, Boolean> isWorldDisabled() {
+        if (getToWorld() == null) return new SingleSet<>(false, false); // probably not possible
 
         String worldName = getToWorld().getName();
 
-        return FlyingAllowed.getWorldConfig().getDisabledWorlds().contains(worldName);
+        WorldConfig config = FlyingAllowed.getWorldConfig();
+        ConcurrentSkipListSet<String> worlds = config.getDisabledWorlds();
+        boolean isWhitelist = config.isWhitelist();
+        boolean isFullDisable = config.isFullDisable();
+
+        boolean drop = false;
+        if (isWhitelist) { // whitelist = drop if in list
+            drop = worlds.contains(worldName);
+        } else {
+            drop = ! worlds.contains(worldName);
+        }
+
+        return new SingleSet<>(drop, isFullDisable);
     }
 
     public String getWorldPermission() {

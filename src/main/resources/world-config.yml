@@ -1,4 +1,13 @@
 # World Config
 
+# List of worlds where flying is disabled
 disabled-worlds:
 - some_disabled_world
+
+# Determine if the disabled-worlds list acts as a whitelist or blacklist
+# Whitelist: only worlds in the list have flying disabled
+# Blacklist: all worlds except those in the list have flying disabled
+is-whitelist: false
+
+# Determine if flying is completely disabled in the listed worlds
+is-full-disable: false
