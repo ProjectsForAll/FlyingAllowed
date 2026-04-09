@@ -236,6 +236,8 @@ public class PlayerMoveData {
     }
 
     public boolean getIsShouldTeleport() {
+        if (! FlyingAllowed.getMainConfig().getAutoToggleOffTeleportEnabled()) return false;
+
         if (player.isGliding()) return false;
 
         if (FlyingAllowed.getMainConfig().getAutoToggleOffTeleportCheckIfOnGround()) {

@@ -20,6 +20,7 @@ public class MainConfig extends SimpleConfiguration {
 
         getAutoToggleOffEnabled();
         getAutoToggleOffBypassPerm();
+        getAutoToggleOffTeleportEnabled();
         getAutoToggleOffTeleportCheckIfOnGround();
         getAutoToggleOffTeleportMakeInvulnerableTicks();
 
@@ -54,6 +55,12 @@ public class MainConfig extends SimpleConfiguration {
         reloadResource();
 
         return getOrSetDefault("toggle.off.auto.enabled", true);
+    }
+
+    public boolean getAutoToggleOffTeleportEnabled() {
+        reloadResource();
+
+        return getOrSetDefault("toggle.off.auto.teleport.enabled", true);
     }
 
     public boolean getAutoToggleOffTeleportCheckIfOnGround() {

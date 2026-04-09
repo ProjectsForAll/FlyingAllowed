@@ -13,6 +13,8 @@ toggle:
       enabled: true
     # Settings for teleportation due to toggling flight off.
     teleport:
+      # If enabled, teleportation will be performed when flight is toggled off.
+      enabled: true
       # Check if player is on the ground before teleporting them.
       # If the player is not on the ground, they will be teleported.
       # If they are on the ground, they will not be teleported.
