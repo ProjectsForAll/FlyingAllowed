@@ -18,6 +18,8 @@ import org.bukkit.Bukkit;
 
 @Getter @Setter
 public final class FlyingAllowed extends BetterPlugin {
+    public static final String MODRINTH_ID = "6hSbyuAM";
+
     @Getter @Setter
     private static FlyingAllowed instance;
 
@@ -42,6 +44,11 @@ public final class FlyingAllowed extends BetterPlugin {
 
     public FlyingAllowed() {
         super();
+    }
+
+    @Override
+    public String getModrinthId() {
+        return MODRINTH_ID;
     }
 
     @Override
