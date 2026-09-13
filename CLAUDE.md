@@ -45,6 +45,18 @@ The build is sensitive to versions in a way that is easy to break:
 
 Write Java 11 — no records, no arrow-`switch` expressions.
 
+The build uses `sourceCompatibility`/`targetCompatibility` rather than
+`options.release`, so there is **no bootclasspath restriction**: code compiled on
+JDK 25 can call an API that did not exist in Java 11, emit valid major-55
+bytecode, and then `NoSuchMethodError` at runtime on a real server. The compiler
+will not catch this for you. After a toolchain change, confirm the target
+survived:
+
+```bash
+unzip -p target/libs/FlyingAllowed-<version>.jar host/plas/flyingallowed/FlyingAllowed.class | od -An -tu1 -j6 -N2
+# 0 55 = Java 11 (correct); 69 would be Java 25 and will not load
+```
+
 ### Dependencies
 
 Version lists live in **`dependencies.gradle`**, not `build.gradle`, grouped as
@@ -153,6 +165,8 @@ and calling it from `init()`; the `.yml` in `resources/` does not need the key.
 - Lombok `@Getter @Setter` on the class is used heavily, including on
   static-only holder classes.
 - Messages go through BOU's `Sender`, not `player.sendMessage`.
+- All four commands extend BOU's `SimplifiedCommand` (not `ComplexCommand`);
+  they are constructed in `onBaseEnabled` and declared in `plugin.yml`.
 - Permissions: `flyingallowed.allow.<world>` per world,
   `flyingallowed.command.<cmd>` per command, with claim/region and bypass
   permissions configurable in `config.yml` rather than hardcoded.
