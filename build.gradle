@@ -1,7 +1,7 @@
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '7.1.2' // for shadowing
-    id "io.freefair.lombok" version "8.6"
+    id 'com.gradleup.shadow' version '9.6.1' // for shadowing
+    id "io.freefair.lombok" version "9.5.0"
 }
 
 apply from: rootDir.toString() + '/dependencies.gradle'
@@ -9,8 +9,18 @@ apply from: rootDir.toString() + '/dependencies.gradle'
 group = properties['group']
 version = properties['version']
 
+// Build output lands in target/ rather than Gradle's default build/.
+layout.buildDirectory = file("target")
+
 java.sourceCompatibility = JavaVersion.VERSION_11
 java.targetCompatibility = JavaVersion.VERSION_11
+
+// Lombok reaches into javac internals, so the version must know about the JDK
+// compiling the build. The plugin's bundled default lags current JDKs; pinning
+// keeps the annotation processor ahead of the toolchain in use.
+lombok {
+    version = '1.18.48'
+}
 
 ext {
     pluginMain = properties['plugin.main'] == 'default' ?
@@ -65,7 +75,10 @@ repositories {
     }
 }
 
-disableAutoTargetJvm()
+// Several of the soft-depend plugin APIs ship with a higher bytecode target
+// than this plugin's Java 11 output; without this, resolution rejects them for
+// being incompatible with the target JVM even though they are compile-only.
+java.disableAutoTargetJvm()
 
 dependencies {
     // Defaults.
@@ -106,17 +119,15 @@ processResources {
 shadowJar {
     archiveClassifier.set('')
 
-    buildDir = "target/"
     archiveFileName = "${project.name}-${project.version}.jar"
 
     minimize()
 }
 
-artifacts {
-    archives shadowJar
-}
+// The plugin jar is the shaded one, so `build` must produce it.
+assemble.dependsOn shadowJar
 
 wrapper {
-    gradleVersion = '8.9'
+    gradleVersion = '9.7.1'
     distributionType = Wrapper.DistributionType.ALL
 }
