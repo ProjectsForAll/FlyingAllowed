@@ -18,6 +18,10 @@
 .PARAMETER SkipBuild
     Publish the existing jar instead of rebuilding.
 
+.PARAMETER StopOneDrive
+    Passed to clean-builds.ps1: stop the OneDrive sync client before deleting
+    build output. Use when the clean step reports locked files.
+
 .PARAMETER VersionType
     release (default), beta, or alpha.
 
@@ -33,6 +37,7 @@
 param(
     [switch] $Confirm,
     [switch] $SkipBuild,
+    [switch] $StopOneDrive,
     [ValidateSet('release', 'beta', 'alpha')]
     [string] $VersionType = 'release'
 )
@@ -134,11 +139,20 @@ function Get-GameVersions {
 }
 
 function Invoke-Build {
+    # clean-builds.ps1 stands in for Gradle's own `clean` task, which cannot
+    # delete output that a daemon or the OneDrive sync client still holds open.
+    $cleanScript = Join-Path $RootDir 'clean-builds.ps1'
+    if (Test-Path $cleanScript) {
+        if ($StopOneDrive) { & $cleanScript -StopOneDrive } else { & $cleanScript }
+    } else {
+        Write-Warn 'clean-builds.ps1 not found; building without cleaning first.'
+    }
+
     Write-Step 'Building'
     $gradlew = Join-Path $RootDir 'gradlew.bat'
     if (-not (Test-Path $gradlew)) { throw "gradlew.bat not found at $gradlew" }
 
-    & $gradlew --project-dir $RootDir clean build
+    & $gradlew --project-dir $RootDir build
     if ($LASTEXITCODE -ne 0) { throw "Gradle build failed with exit code $LASTEXITCODE." }
     Write-Ok 'Build succeeded.'
 }
