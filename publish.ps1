@@ -269,20 +269,42 @@ if (-not $Confirm) {
 
 Write-Step "Publishing $version to Modrinth"
 
-$form = @{
-    data = ($metadata | ConvertTo-Json -Depth 6 -Compress)
-    file = Get-Item -LiteralPath $jarPath
-}
+# The body is assembled by hand rather than with -Form because Modrinth parses
+# the "data" part as JSON, and -Form sends every string part as text/plain with
+# no way to override the per-part Content-Type.
+Add-Type -AssemblyName System.Net.Http
+
+$json = $metadata | ConvertTo-Json -Depth 6 -Compress
+
+$content = [System.Net.Http.MultipartFormDataContent]::new()
+$client = [System.Net.Http.HttpClient]::new()
+$jarStream = [System.IO.File]::OpenRead($jarPath)
 
 try {
-    $response = Invoke-RestMethod -Uri 'https://api.modrinth.com/v2/version' `
-                                  -Method Post `
-                                  -Headers @{ Authorization = $token; 'User-Agent' = $UserAgent } `
-                                  -Form $form
-} catch {
-    $detail = $_.ErrorDetails.Message
-    if ($detail) { Write-Host $detail -ForegroundColor Red }
-    throw "Publish failed: $($_.Exception.Message)"
+    $dataPart = [System.Net.Http.StringContent]::new($json, [System.Text.Encoding]::UTF8, 'application/json')
+    $content.Add($dataPart, 'data')
+
+    $filePart = [System.Net.Http.StreamContent]::new($jarStream)
+    $filePart.Headers.ContentType = [System.Net.Http.Headers.MediaTypeHeaderValue]::new('application/java-archive')
+    # Must match the name listed in file_parts, and primary_file, above.
+    $content.Add($filePart, 'file', (Split-Path $jarPath -Leaf))
+
+    $client.DefaultRequestHeaders.Add('Authorization', $token)
+    $client.DefaultRequestHeaders.Add('User-Agent', $UserAgent)
+
+    $result = $client.PostAsync('https://api.modrinth.com/v2/version', $content).GetAwaiter().GetResult()
+    $body = $result.Content.ReadAsStringAsync().GetAwaiter().GetResult()
+
+    if (-not $result.IsSuccessStatusCode) {
+        if ($body) { Write-Host $body -ForegroundColor Red }
+        throw "Publish failed: $([int]$result.StatusCode) $($result.ReasonPhrase)."
+    }
+
+    $response = $body | ConvertFrom-Json
+} finally {
+    $jarStream.Dispose()
+    $content.Dispose()
+    $client.Dispose()
 }
 
 Write-Ok "Published $version."
