@@ -16,6 +16,7 @@ softdepend:
   - KingdomsX
   - HuskClaims
   - WorldGuard
+  - GriefDefender
   - ImprovedFactions
 
 folia-supported: true
