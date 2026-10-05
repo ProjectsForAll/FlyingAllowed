@@ -25,5 +25,6 @@ ext {
             'net.william278.huskclaims:huskclaims-bukkit:1.5.10', // HuskClaims Support
             'com.sk89q.worldguard:worldguard-bukkit:7.0.13', // WorldGuard Support
             'com.griefdefender:api:2.1.0-SNAPSHOT', // GriefDefender Support
+            'maven.modrinth:improved-factions:2.3.0-dev.234', // Improved Factions Support
     ]
 }

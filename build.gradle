@@ -73,6 +73,12 @@ repositories {
         name = 'griefdefender'
         url = 'https://repo.glaremasters.me/repository/bloodshot'
     }
+
+    // Improved Factions (only published on Modrinth)
+    maven {
+        url = 'https://api.modrinth.com/maven'
+        content { includeGroup 'maven.modrinth' }
+    }
 }
 
 // Several of the soft-depend plugin APIs ship with a higher bytecode target

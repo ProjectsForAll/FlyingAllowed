@@ -9,6 +9,7 @@ public enum FlightExtent {
     PROTECTION_STONES,
     HUSK_CLAIMS,
     GRIEF_DEFENDER,
+    IMPROVED_FACTIONS,
 
     // Region Plugins
     WORLDGUARD,

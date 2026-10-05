@@ -5,6 +5,7 @@ import host.plas.bou.compat.HeldHolder;
 import host.plas.flyingallowed.compat.plugins.gdefender.GDefenderHeld;
 import host.plas.flyingallowed.compat.plugins.gp.GPHeld;
 import host.plas.flyingallowed.compat.plugins.hclaims.HClaimsHeld;
+import host.plas.flyingallowed.compat.plugins.ifactions.IFactionsHeld;
 import host.plas.flyingallowed.compat.plugins.kingdoms.KingdomsHeld;
 import host.plas.flyingallowed.compat.plugins.lands.LandsHeld;
 import host.plas.flyingallowed.compat.plugins.lands.LandsHolder;
@@ -26,6 +27,7 @@ public enum HookedPlugins {
     HCLAIMS_IDENTIFIER(HClaimsHeld.IDENTIFIER, HClaimsHeld::new),
     WG_IDENTIFIER(WGHeld.IDENTIFIER, WGHeld::new),
     GRIEF_DEFENDER_IDENTIFIER(GDefenderHeld.IDENTIFIER, GDefenderHeld::new),
+    IMPROVED_FACTIONS_IDENTIFIER(IFactionsHeld.IDENTIFIER, IFactionsHeld::new),
     ;
 
     private final String identifier;
