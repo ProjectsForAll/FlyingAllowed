@@ -64,6 +64,11 @@ Version lists live in **`dependencies.gradle`**, not `build.gradle`, grouped as
 claim-plugin API is `compileOnly` in `OTHER_PLUGINS` — nothing is shaded, so
 `minimize()` has nothing to strip.
 
+An API with no reachable Maven artifact (currently FabledSkyBlock) is instead
+hand-stubbed under `src/stubs/java` — a separate `stubs` source set on the main
+`compileOnly` classpath, never packaged. Stubs must mirror the real signatures
+exactly; see `src/stubs/README.md`.
+
 `plugin.yml` is templated: `name`, `version`, and `main` are expanded from
 `gradle.properties` at `processResources` time. Bump the version there, not in
 the YAML. `plugin.main = default` derives the main class as

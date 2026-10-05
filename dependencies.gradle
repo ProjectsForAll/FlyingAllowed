@@ -26,5 +26,6 @@ ext {
             'com.sk89q.worldguard:worldguard-bukkit:7.0.13', // WorldGuard Support
             'com.griefdefender:api:2.1.0-SNAPSHOT', // GriefDefender Support
             'maven.modrinth:improved-factions:2.3.0-dev.234', // Improved Factions Support
+            'com.iridium:IridiumSkyblock:4.1.5', // IridiumSkyblock Support
     ]
 }

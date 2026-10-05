@@ -10,6 +10,8 @@ public enum FlightExtent {
     HUSK_CLAIMS,
     GRIEF_DEFENDER,
     IMPROVED_FACTIONS,
+    FABLED_SKYBLOCK,
+    IRIDIUM_SKYBLOCK,
 
     // Region Plugins
     WORLDGUARD,

@@ -18,6 +18,8 @@ softdepend:
   - WorldGuard
   - GriefDefender
   - ImprovedFactions
+  - FabledSkyBlock
+  - IridiumSkyblock
 
 folia-supported: true
 
