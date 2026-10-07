@@ -1,2 +1,5 @@
-# 1.16.0
-- Fixed issues with the new BOU system in BOU 1.19.2
+# 1.16.1
+- Fixed spamming issues.
+- Added support for:
+  - IridiumSkyblock
+  - InsaneFactions

@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 @Getter @Setter
@@ -26,6 +27,7 @@ public class FlightWorlds implements Listener {
         PlayerMoveEvent.getHandlerList().unregister(this);
         PlayerTeleportEvent.getHandlerList().unregister(this);
         PlayerPortalEvent.getHandlerList().unregister(this);
+        PlayerQuitEvent.getHandlerList().unregister(this);
     }
 
     public void onSameWorld(PlayerMoveData data) {
@@ -33,6 +35,7 @@ public class FlightWorlds implements Listener {
     }
 
     public void onDifferentWorld(PlayerMoveData data) {
+        MoveDataCache.remove(data.getPlayer());
         data.checkPermission();
     }
 
@@ -58,6 +61,11 @@ public class FlightWorlds implements Listener {
             // Player is leaving the flight world.
             onDifferentWorld(data);
         }
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        MoveDataCache.remove(event.getPlayer());
     }
 
     @EventHandler

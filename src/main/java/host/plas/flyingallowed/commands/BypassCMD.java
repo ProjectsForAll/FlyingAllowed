@@ -5,6 +5,7 @@ import host.plas.bou.commands.CommandArgument;
 import host.plas.bou.commands.CommandContext;
 import host.plas.bou.commands.SimplifiedCommand;
 import host.plas.flyingallowed.FlyingAllowed;
+import host.plas.flyingallowed.data.MoveDataCache;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -69,6 +70,7 @@ public class BypassCMD extends SimplifiedCommand {
             FlyingAllowed.getMainConfig().addBypassingPlayer(target);
         }
         boolean newVal = FlyingAllowed.getMainConfig().isBypassing(target);
+        MoveDataCache.remove(target);
 
         if (sender != target) {
             commandContext.getSender().sendMessage("&eYou have " + (newVal ? "&aenabled" : "&cdisabled") + " &eflight bypassing for &a" + target.getName() + "&e!");

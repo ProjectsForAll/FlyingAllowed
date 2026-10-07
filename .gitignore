@@ -121,3 +121,7 @@ run/
 
 /target/
 /.fastRequest/
+
+# Dev Files
+**.log
+**Screenshot**

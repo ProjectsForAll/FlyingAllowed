@@ -151,6 +151,21 @@ shadowJar {
 // The plugin jar is the shaded one, so `build` must produce it.
 assemble.dependsOn shadowJar
 
+// Run flight-state regression checks without a live server.
+sourceSets {
+    regressionTest {
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+    }
+}
+
+tasks.register('testFlightState', JavaExec) {
+    dependsOn regressionTestClasses
+    classpath = sourceSets.regressionTest.runtimeClasspath
+    mainClass = 'host.plas.flyingallowed.data.FlightStateTest'
+}
+check.dependsOn testFlightState
+
 wrapper {
     gradleVersion = '9.7.1'
     distributionType = Wrapper.DistributionType.ALL

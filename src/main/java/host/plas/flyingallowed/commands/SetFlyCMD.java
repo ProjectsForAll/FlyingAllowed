@@ -2,6 +2,7 @@ package host.plas.flyingallowed.commands;
 
 import gg.drak.thebase.utils.StringUtils;
 import host.plas.flyingallowed.FlyingAllowed;
+import host.plas.flyingallowed.data.MoveDataCache;
 import host.plas.bou.commands.CommandArgument;
 import host.plas.bou.commands.CommandContext;
 import host.plas.bou.commands.SimplifiedCommand;
@@ -57,6 +58,7 @@ public class SetFlyCMD extends SimplifiedCommand {
         boolean newVal = optionalBoolean.get();
 
         target.setAllowFlight(newVal);
+        MoveDataCache.remove(target);
 
         if (target.isFlying() && ! newVal) {
             target.setFlying(false);

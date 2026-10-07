@@ -44,6 +44,7 @@ public class MoveDataCache {
 
     public static void remove(Player player) {
         cache.remove(player.getUniqueId().toString());
+        cacheLong.remove(player.getUniqueId().toString());
     }
 
     public static void flush() {
@@ -59,8 +60,6 @@ public class MoveDataCache {
     }
 
     public static boolean checkEquals(Player player, FlightAbility ability) {
-        if (! contains(player)) return false;
-
-        return get(player).orElse(FlightAbility.UNABLE_TO_FLY) == ability;
+        return cacheLong.get(player.getUniqueId().toString()) == ability;
     }
 }

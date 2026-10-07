@@ -113,6 +113,7 @@ public class PlayerMoveData {
             if (! fullDisable) {
                 return;
             } else {
+                MoveDataCache.remove(player);
                 teleportTopLocation();
                 getPlayer().setFlying(false);
                 getPlayer().setAllowFlight(false);
@@ -127,16 +128,20 @@ public class PlayerMoveData {
         if (gameMode == GameMode.CREATIVE || gameMode == GameMode.SPECTATOR) return;
 
         try {
-            SingleSet<FlightAbility, FlightExtent> set = CompatManager.getFlyingAllowed(this);
+            SingleSet<FlightAbility, FlightExtent> set = lookupFlightAbility();
 
             FlightAbility ability = set.getKey();
             FlightExtent extent = set.getValue();
 
-            if (MoveDataCache.checkEquals(player, ability)) return; // Before setting.
+            boolean unchanged = MoveDataCache.checkEquals(player, ability);
             MoveDataCache.cache(getPlayer(), ability);
 
+            // Auto-enable on an eligibility change, rather than every lookup refresh.
+            // Denials still run so flight restrictions remain enforced.
+            if (unchanged && ability == FlightAbility.ABLE_TO_FLY) return;
+
             if (ability == FlightAbility.ABLE_TO_FLY || ability == FlightAbility.UNABLE_TO_FLY || ability == FlightAbility.NO_CLAIM) {
-                if (player.hasPermission(FlyingAllowed.getMainConfig().getLandsToggleOnPerm())) {
+                if (hasAutoToggleOnPermission()) {
                     if (checkFlyAndIsHandled(ability, extent, FlightFlag.TOGGLE_ALLOWED)) return;
                 } else if (checkFlyAndIsHandled(ability, extent)) return;
             }
@@ -144,8 +149,8 @@ public class PlayerMoveData {
             e.printStackTrace();
         }
 
-        if (! player.getAllowFlight() && hasPermission() && checkBypassPermissionOn() && checkSoftBypassPermissionOn()) {
-            player.setAllowFlight(true);
+        if (! FlightState.isEnabled(player) && hasPermission() && checkBypassPermissionOn() && checkSoftBypassPermissionOn()
+                && FlightState.enable(player)) {
 
             Sender sender = new Sender(player);
             sender.sendMessage(FlyingAllowed.getMessageConfig().getToggleOnWorldMessage());
@@ -157,6 +162,14 @@ public class PlayerMoveData {
             Sender sender = new Sender(player);
             sender.sendMessage(FlyingAllowed.getMessageConfig().getToggleOffWorldMessage());
         }
+    }
+
+    protected SingleSet<FlightAbility, FlightExtent> lookupFlightAbility() {
+        return CompatManager.getFlyingAllowed(this);
+    }
+
+    protected boolean hasAutoToggleOnPermission() {
+        return player.hasPermission(FlyingAllowed.getMainConfig().getLandsToggleOnPerm());
     }
 
     public SingleSet<Boolean, Boolean> isWorldDisabled() {
@@ -194,8 +207,8 @@ public class PlayerMoveData {
     public boolean checkFlyAndIsHandled(FlightAbility ability, FlightExtent extent, List<FlightFlag> flags) {
         if (ability == FlightAbility.ABLE_TO_FLY) {
             if (flags.contains(FlightFlag.TOGGLE_ALLOWED)) {
-                if (! player.getAllowFlight() && checkBypassPermissionOn() && checkSoftBypassPermissionOn()) {
-                    player.setAllowFlight(true);
+                if (! FlightState.isEnabled(player) && checkBypassPermissionOn() && checkSoftBypassPermissionOn()
+                        && FlightState.enable(player)) {
 
                     Sender sender = new Sender(player);
                     if (extent == FlightExtent.WORLDGUARD) {
