@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 public class GDefenderHolder extends FlyingHolder<Core> {
     public GDefenderHolder() {
-        super(GDefenderHeld.IDENTIFIER, (v) -> GriefDefender.getCore(), FlightExtent.GRIEF_PREVENTION);
+        super(GDefenderHeld.IDENTIFIER, (v) -> GriefDefender.getCore(), FlightExtent.GRIEF_DEFENDER);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class GDefenderHolder extends FlyingHolder<Core> {
             }
 
             if (moveData.hasFlyInClaimPermission()) {
-                if (claim.getOwnerUniqueId().equals(moveData.getPlayer().getUniqueId()) || checkClaimExtents(moveData.getPlayer(), claim)) {
+                if (moveData.getPlayer().getUniqueId().equals(claim.getOwnerUniqueId()) || checkClaimExtents(moveData.getPlayer(), claim)) {
                     return FlightAbility.ABLE_TO_FLY;
                 } else {
                     return FlightAbility.UNABLE_TO_FLY;
@@ -44,7 +44,7 @@ public class GDefenderHolder extends FlyingHolder<Core> {
     }
 
     public boolean checkClaimExtents(Player player, Claim claim) {
-        if (claim.getOwnerUniqueId().equals(player.getUniqueId())) return true;
+        if (player.getUniqueId().equals(claim.getOwnerUniqueId())) return true;
 
         // Don't need to check subdivisions, as we want per claim / subdivision lookup.
 //        if (claim.isSubdivision()) {

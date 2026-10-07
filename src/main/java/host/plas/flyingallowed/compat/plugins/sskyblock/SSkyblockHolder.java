@@ -2,9 +2,8 @@ package host.plas.flyingallowed.compat.plugins.sskyblock;
 
 import com.bgsoftware.superiorskyblock.api.SuperiorSkyblock;
 import com.bgsoftware.superiorskyblock.api.SuperiorSkyblockAPI;
-import com.bgsoftware.superiorskyblock.api.handlers.RolesManager;
+import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
 import com.bgsoftware.superiorskyblock.api.island.Island;
-import com.bgsoftware.superiorskyblock.api.island.PlayerRole;
 import host.plas.bou.compat.ApiHolder;
 import host.plas.flyingallowed.compat.CompatManager;
 import host.plas.flyingallowed.compat.plugins.FlyingHolder;
@@ -33,7 +32,7 @@ public class SSkyblockHolder extends FlyingHolder<SuperiorSkyblock> {
                 return FlightAbility.ABLE_TO_FLY;
             }
 
-            if (moveData.getPlayer().hasPermission("flyingallowed.in.lands")) {
+            if (moveData.hasFlyInClaimPermission()) {
                 if (isPlayerMemberOfIsland(moveData.getPlayer(), island)) {
                     return FlightAbility.ABLE_TO_FLY;
                 } else {
@@ -43,7 +42,7 @@ public class SSkyblockHolder extends FlyingHolder<SuperiorSkyblock> {
                 return FlightAbility.UNABLE_TO_FLY;
             }
         } else {
-            if (moveData.getPlayer().hasPermission("flyingallowed.in.lands")) {
+            if (moveData.hasFlyInClaimPermission()) {
                 return FlightAbility.NO_CLAIM;
             } else {
                 return FlightAbility.UNABLE_TO_FLY;
@@ -51,18 +50,13 @@ public class SSkyblockHolder extends FlyingHolder<SuperiorSkyblock> {
         }
     }
 
+    /**
+     * Island members (owner included) and coop players belong to the island; visitors do not.
+     */
     public boolean isPlayerMemberOfIsland(Player player, Island island) {
-        if (island.getOwner().getUniqueId().equals(player.getUniqueId())) return true;
+        SuperiorPlayer superiorPlayer = SuperiorSkyblockAPI.getPlayer(player);
+        if (superiorPlayer == null) return false;
 
-        RolesManager rolesManager = api().getRoles();
-
-        boolean isCoop = isPlayerMember(player, island, rolesManager.getCoopRole());
-        boolean isGuest = isPlayerMember(player, island, rolesManager.getGuestRole());
-
-        return isCoop || ! isGuest;
-    }
-
-    public boolean isPlayerMember(Player player, Island island, PlayerRole role) {
-        return island.getIslandMembers(role).stream().anyMatch(member -> member.getUniqueId().equals(player.getUniqueId()));
+        return island.isMember(superiorPlayer) || island.isCoop(superiorPlayer);
     }
 }

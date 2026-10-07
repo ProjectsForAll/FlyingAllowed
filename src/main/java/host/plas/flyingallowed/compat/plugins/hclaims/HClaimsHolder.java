@@ -31,10 +31,11 @@ public class HClaimsHolder extends FlyingHolder<HuskClaimsAPI> {
         try {
             user = api().getOnlineUser(moveData.getPlayer().getUniqueId());
         } catch (Throwable e) {
-            if (e.getMessage().contains("Player is not online")) {
+            if (e.getMessage() != null && e.getMessage().contains("Player is not online")) {
                 FlyingAllowed.getInstance().logDebug("Checking for offline players is not allowed by HuskClaims.");
             }
-            return FlightAbility.UNABLE_TO_FLY;
+            // No answer rather than a denial: a denial outranks NO_CLAIM and would ground the player in the wild.
+            return FlightAbility.ISSUE;
         }
 
         Position position = Position.at(

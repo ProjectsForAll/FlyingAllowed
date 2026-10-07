@@ -54,11 +54,16 @@ public class SetFlyCMD extends SimplifiedCommand {
             target = player;
         }
 
+        if (! sender.equals(target) && ! sender.hasPermission("flyingallowed.command.set-fly.others")) {
+            commandContext.getSender().sendMessage("&cYou do not have permission to use this command on other players!");
+            return false;
+        }
+
         boolean oldVal = target.getAllowFlight();
         boolean newVal = optionalBoolean.get();
 
         target.setAllowFlight(newVal);
-        MoveDataCache.remove(target);
+        MoveDataCache.invalidate(target);
 
         if (target.isFlying() && ! newVal) {
             target.setFlying(false);

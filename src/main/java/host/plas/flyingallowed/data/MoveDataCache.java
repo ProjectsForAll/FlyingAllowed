@@ -42,6 +42,19 @@ public class MoveDataCache {
         cacheLong.put(player.getUniqueId().toString(), ability);
     }
 
+    /**
+     * Forces a fresh lookup on the player's next move while keeping their last known verdict,
+     * so an unchanged {@link FlightAbility#ABLE_TO_FLY} does not re-enable flight the player
+     * (or a staff member) just turned off.
+     */
+    public static void invalidate(Player player) {
+        cache.remove(player.getUniqueId().toString());
+    }
+
+    /**
+     * Forgets the player entirely; the next lookup is treated as an eligibility change and may
+     * auto-enable flight again.
+     */
     public static void remove(Player player) {
         cache.remove(player.getUniqueId().toString());
         cacheLong.remove(player.getUniqueId().toString());

@@ -123,7 +123,7 @@ public class MainConfig extends SimpleConfiguration {
         ConcurrentSkipListSet<String> bypassingPlayers = getCurrentSoftBypassingPlayers();
         bypassingPlayers.remove(uuid);
 
-        write("bypassing.soft.player-list", bypassingPlayers);
+        write("bypassing.soft.player-list", new ArrayList<>(bypassingPlayers));
     }
 
     public void addBypassingPlayer(String uuid) {
@@ -132,7 +132,7 @@ public class MainConfig extends SimpleConfiguration {
         ConcurrentSkipListSet<String> bypassingPlayers = getCurrentSoftBypassingPlayers();
         bypassingPlayers.add(uuid);
 
-        write("bypassing.soft.player-list", bypassingPlayers);
+        write("bypassing.soft.player-list", new ArrayList<>(bypassingPlayers));
     }
 
     public boolean isBypassing(String uuid) {

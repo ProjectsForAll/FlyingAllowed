@@ -7,10 +7,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 @Getter @Setter
@@ -24,10 +27,7 @@ public class FlightWorlds implements Listener {
     }
 
     public void unregister() {
-        PlayerMoveEvent.getHandlerList().unregister(this);
-        PlayerTeleportEvent.getHandlerList().unregister(this);
-        PlayerPortalEvent.getHandlerList().unregister(this);
-        PlayerQuitEvent.getHandlerList().unregister(this);
+        HandlerList.unregisterAll(this);
     }
 
     public void onSameWorld(PlayerMoveData data) {
@@ -63,22 +63,48 @@ public class FlightWorlds implements Listener {
         }
     }
 
+    /**
+     * Whether a move stays inside the same block. Claims and regions are resolved per block,
+     * so such a move (including a pure head rotation) cannot change the verdict.
+     */
+    public static boolean isSameBlock(Location from, Location to) {
+        if (to == null || from.getWorld() != to.getWorld()) return false;
+
+        return from.getBlockX() == to.getBlockX()
+                && from.getBlockY() == to.getBlockY()
+                && from.getBlockZ() == to.getBlockZ();
+    }
+
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         MoveDataCache.remove(event.getPlayer());
     }
 
-    @EventHandler
-    public void onMoveToWorld(PlayerMoveEvent event) {
-        onMoveWorld(event);
+    // Both reset allow-flight for survival players, so the last verdict no longer reflects the
+    // player's state and the next move must be free to re-enable flight.
+    @EventHandler(ignoreCancelled = true)
+    public void onGameModeChange(PlayerGameModeChangeEvent event) {
+        MoveDataCache.remove(event.getPlayer());
     }
 
     @EventHandler
+    public void onRespawn(PlayerRespawnEvent event) {
+        MoveDataCache.remove(event.getPlayer());
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onMoveToWorld(PlayerMoveEvent event) {
+        if (isSameBlock(event.getFrom(), event.getTo())) return;
+
+        onMoveWorld(event);
+    }
+
+    @EventHandler(ignoreCancelled = true)
     public void onTeleportToWorld(PlayerTeleportEvent event) {
         onMoveWorld(event);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPortalToWorld(PlayerPortalEvent event) {
         onMoveWorld(event);
     }

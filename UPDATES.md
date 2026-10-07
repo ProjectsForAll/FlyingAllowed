@@ -2,4 +2,13 @@
 - Fixed spamming issues.
 - Added support for:
   - IridiumSkyblock
-  - InsaneFactions
+  - Improved Factions
+  - FabledSkyBlock
+- Fixed `/fly`, `/set-fly`, and `/fly-bypass` acting on other players without the `.others` permission.
+- Fixed `/fly` off being undone on the next step inside a claim the player may fly in.
+- Fixed flight not returning inside a flyable claim after a respawn or a gamemode change.
+- Fixed SuperiorSkyblock2 letting every visitor fly on any island.
+- Fixed errors in GriefPrevention admin claims.
+- Lands, KingdomsX, ProtectionStones, and SuperiorSkyblock2 now honor the configured in-claims permission (`flyingallowed.in.lands` still works).
+- Full-disable worlds no longer affect creative or spectator players.
+- One failing claim plugin no longer breaks flight checks for the others.

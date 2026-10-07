@@ -48,11 +48,16 @@ public class FlyCMD extends SimplifiedCommand {
             target = player;
         }
 
+        if (! sender.equals(target) && ! sender.hasPermission("flyingallowed.command.fly.others")) {
+            commandContext.getSender().sendMessage("&cYou do not have permission to use this command on other players!");
+            return false;
+        }
+
         boolean oldVal = target.getAllowFlight();
         boolean newVal = ! target.getAllowFlight();
 
         target.setAllowFlight(newVal);
-        MoveDataCache.remove(target);
+        MoveDataCache.invalidate(target);
 
         if (target.isFlying() && ! newVal) {
             target.setFlying(false);

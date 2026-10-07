@@ -48,6 +48,11 @@ public class BypassCMD extends SimplifiedCommand {
             target = player;
         }
 
+        if (! sender.equals(target) && ! sender.hasPermission("flyingallowed.command.fly-bypass.others")) {
+            commandContext.getSender().sendMessage("&cYou do not have permission to use this command on other players!");
+            return false;
+        }
+
         if (target == null) {
             commandContext.getSender().sendMessage("&cThat player is not online!");
             return false;

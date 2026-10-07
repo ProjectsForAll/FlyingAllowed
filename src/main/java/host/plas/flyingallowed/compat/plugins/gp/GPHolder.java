@@ -31,7 +31,7 @@ public class GPHolder extends FlyingHolder<GriefPrevention> {
             }
 
             if (moveData.hasFlyInClaimPermission()) {
-                if (claim.getOwnerID().equals(moveData.getPlayer().getUniqueId()) || checkClaimExtents(moveData.getPlayer(), claim)) {
+                if (moveData.getPlayer().getUniqueId().equals(claim.getOwnerID()) || checkClaimExtents(moveData.getPlayer(), claim)) {
                     return FlightAbility.ABLE_TO_FLY;
                 } else {
                     return FlightAbility.UNABLE_TO_FLY;

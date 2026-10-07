@@ -6,7 +6,7 @@ import host.plas.flyingallowed.data.MoveDataCache;
 
 public class CacheTimer extends BaseRunnable {
     public CacheTimer() {
-        super(0, getCachePeriod()); // 5 minutes
+        super(0, getCachePeriod());
     }
 
     @Override

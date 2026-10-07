@@ -79,6 +79,17 @@ public final class FlightStateTest {
         data.checkPermission();
         expect(before + 1, data.handledCalls, "unchanged denial still enforces flight restriction");
         expect(false, player.allowFlight, "denied flight stays disabled");
+
+        data.ability = FlightAbility.ABLE_TO_FLY;
+        MoveDataCache.flush();
+        data.checkPermission();
+        int enabledBefore = player.enableCalls;
+        // Reproduce /fly off inside a flyable claim: the command invalidates the short cache only.
+        player.allowFlight = false;
+        MoveDataCache.invalidate(player.player);
+        data.checkPermission();
+        expect(enabledBefore, player.enableCalls, "flight turned off by command is not re-enabled");
+        expect(false, player.allowFlight, "flight stays off after command");
         MoveDataCache.flushAll();
     }
 

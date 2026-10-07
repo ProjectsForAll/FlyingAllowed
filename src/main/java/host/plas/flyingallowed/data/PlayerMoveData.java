@@ -81,7 +81,7 @@ public class PlayerMoveData {
         World world = location.getWorld();
         if (world == null) return false;
 
-        return location.getBlock().isEmpty() & location.getBlockY() < world.getMaxHeight() && location.getBlockY() > world.getMinHeight();
+        return location.getBlockY() < world.getMaxHeight() && location.getBlockY() > world.getMinHeight() && location.getBlock().isEmpty();
     }
 
     public boolean checkBypassPermissionOn() {
@@ -105,39 +105,38 @@ public class PlayerMoveData {
     }
 
     public void checkPermission() {
+        GameMode gameMode = player.getGameMode();
+        if (gameMode == GameMode.CREATIVE || gameMode == GameMode.SPECTATOR) return;
+
         SingleSet<Boolean, Boolean> ss = isWorldDisabled();
         boolean worldAllow = ss.getKey();
         boolean fullDisable = ss.getValue();
 
         if (! worldAllow) {
-            if (! fullDisable) {
-                return;
-            } else {
+            if (fullDisable && player.getAllowFlight()) {
                 MoveDataCache.remove(player);
                 teleportTopLocation();
                 getPlayer().setFlying(false);
                 getPlayer().setAllowFlight(false);
-                return;
             }
+            return;
         }
 
         Optional<FlightAbility> cached = MoveDataCache.get(player);
         if (cached.isPresent()) return;
 
-        GameMode gameMode = player.getGameMode();
-        if (gameMode == GameMode.CREATIVE || gameMode == GameMode.SPECTATOR) return;
-
+        // An unchanged verdict only enforces denials; enabling happens on eligibility changes,
+        // so flight the player turned off (or something else reset) is not forced back on.
+        boolean unchanged = false;
         try {
             SingleSet<FlightAbility, FlightExtent> set = lookupFlightAbility();
 
             FlightAbility ability = set.getKey();
             FlightExtent extent = set.getValue();
 
-            boolean unchanged = MoveDataCache.checkEquals(player, ability);
+            unchanged = MoveDataCache.checkEquals(player, ability);
             MoveDataCache.cache(getPlayer(), ability);
 
-            // Auto-enable on an eligibility change, rather than every lookup refresh.
-            // Denials still run so flight restrictions remain enforced.
             if (unchanged && ability == FlightAbility.ABLE_TO_FLY) return;
 
             if (ability == FlightAbility.ABLE_TO_FLY || ability == FlightAbility.UNABLE_TO_FLY || ability == FlightAbility.NO_CLAIM) {
@@ -149,7 +148,7 @@ public class PlayerMoveData {
             e.printStackTrace();
         }
 
-        if (! FlightState.isEnabled(player) && hasPermission() && checkBypassPermissionOn() && checkSoftBypassPermissionOn()
+        if (! unchanged && ! FlightState.isEnabled(player) && hasPermission() && checkBypassPermissionOn() && checkSoftBypassPermissionOn()
                 && FlightState.enable(player)) {
 
             Sender sender = new Sender(player);
@@ -239,13 +238,16 @@ public class PlayerMoveData {
     }
 
     public void teleportTopLocation() {
-        if (getIsShouldTeleport()) {
-            TaskManager.teleport(player, getTopLocation());
+        if (! getIsShouldTeleport()) return;
 
-            setYVelocity0();
+        Location topLocation = getTopLocation();
+        if (! isShouldTeleportTo(topLocation)) return;
 
-            setInvulnerableForTicks();
-        }
+        TaskManager.teleport(player, topLocation);
+
+        setYVelocity0();
+
+        setInvulnerableForTicks();
     }
 
     public boolean getIsShouldTeleport() {
@@ -257,10 +259,18 @@ public class PlayerMoveData {
             if (player.isOnGround()) return false;
         }
 
-        double distance = getDistanceFromTopLocation();
-        if (distance <= 1.5) return false;
+        return isShouldTeleportTo(getTopLocation());
+    }
 
-        return true;
+    /**
+     * Whether landing at the given location is worthwhile: it must be more than a short drop
+     * away and rest on a block. Over the void there is no ground, and the search ends at the
+     * bottom of the world.
+     */
+    public boolean isShouldTeleportTo(Location topLocation) {
+        if (topLocation.distance(to) <= 1.5) return false;
+
+        return ! topLocation.clone().subtract(0, 1, 0).getBlock().isEmpty();
     }
 
     public double getDistanceFromTopLocation() {
@@ -280,7 +290,8 @@ public class PlayerMoveData {
         if (player.isGliding()) return;
 
         long invulnerableTicks = FlyingAllowed.getMainConfig().getAutoToggleOffTeleportMakeInvulnerableTicks();
-        if (invulnerableTicks > 0) {
+        // A player who is already invulnerable (e.g. god mode) keeps it; only what is granted here is revoked.
+        if (invulnerableTicks > 0 && ! player.isInvulnerable()) {
             player.setNoDamageTicks((int) invulnerableTicks);
             player.setInvulnerable(true);
             TaskManager.runTaskLater(player, () -> {

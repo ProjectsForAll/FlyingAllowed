@@ -4,13 +4,12 @@ import host.plas.flyingallowed.compat.plugins.FlyingHolder;
 import host.plas.flyingallowed.data.FlightAbility;
 import host.plas.flyingallowed.data.FlightExtent;
 import host.plas.flyingallowed.data.PlayerMoveData;
-import org.bukkit.entity.Player;
 import org.kingdoms.constants.group.Kingdom;
 import org.kingdoms.constants.land.Land;
 import org.kingdoms.constants.land.location.SimpleChunkLocation;
 import org.kingdoms.main.Kingdoms;
 
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.UUID;
 
 public class KingdomsHolder extends FlyingHolder<Kingdoms> {
     public KingdomsHolder() {
@@ -24,37 +23,17 @@ public class KingdomsHolder extends FlyingHolder<Kingdoms> {
         SimpleChunkLocation chunkLocation = SimpleChunkLocation.of(moveData.getTo());
         Land land = Land.getLand(chunkLocation);
 
-        if (land != null) {
+        // A Land record can outlive its claim; without a kingdom the chunk is unclaimed.
+        Kingdom kingdom = land == null ? null : land.getKingdom();
+
+        if (kingdom != null) {
             if (moveData.hasAllClaimsPermission()) {
                 return FlightAbility.ABLE_TO_FLY;
             }
 
-            if (moveData.getPlayer().hasPermission("flyingallowed.in.lands")) {
-                Kingdom kingdom = land.getKingdom();
-                if (kingdom == null) {
-                    return FlightAbility.NO_CLAIM;
-                }
-                AtomicBoolean canBuild = new AtomicBoolean(false);
-                if (kingdom.getOwnerId().equals(moveData.getPlayer().getUniqueId())) {
-                    canBuild.set(true);
-                }
-                if (canBuild.get()) {
-                    return FlightAbility.ABLE_TO_FLY;
-                }
-                kingdom.getPlayerMembers().forEach(offline -> {
-                    if (canBuild.get()) return;
-
-                    if (! (offline instanceof Player)) return;
-                    if (offline.getPlayer() == null) return;
-                    Player player = offline.getPlayer();
-                    if (player == null) return;
-
-                    if (player.getUniqueId().equals(moveData.getPlayer().getUniqueId())) {
-                        canBuild.set(true);
-                    }
-                });
-
-                if (canBuild.get()) {
+            if (moveData.hasFlyInClaimPermission()) {
+                UUID uuid = moveData.getPlayer().getUniqueId();
+                if (uuid.equals(kingdom.getOwnerId()) || kingdom.isMember(uuid)) {
                     return FlightAbility.ABLE_TO_FLY;
                 } else {
                     return FlightAbility.UNABLE_TO_FLY;
@@ -63,7 +42,7 @@ public class KingdomsHolder extends FlyingHolder<Kingdoms> {
                 return FlightAbility.UNABLE_TO_FLY;
             }
         } else {
-            if (moveData.getPlayer().hasPermission("flyingallowed.in.lands")) {
+            if (moveData.hasFlyInClaimPermission()) {
                 return FlightAbility.NO_CLAIM;
             } else {
                 return FlightAbility.UNABLE_TO_FLY;

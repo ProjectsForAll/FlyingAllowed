@@ -36,7 +36,7 @@ public class PStonesHolder extends FlyingHolder<ProtectionStones> {
                 return FlightAbility.ABLE_TO_FLY;
             }
 
-            if (moveData.getPlayer().hasPermission("flyingallowed.in.lands")) {
+            if (moveData.hasFlyInClaimPermission()) {
                 if (canFlyIn(moveData.getPlayer(), region)) {
                     return FlightAbility.ABLE_TO_FLY;
                 } else {
@@ -46,7 +46,7 @@ public class PStonesHolder extends FlyingHolder<ProtectionStones> {
                 return FlightAbility.UNABLE_TO_FLY;
             }
         } else {
-            if (moveData.getPlayer().hasPermission("flyingallowed.in.lands")) {
+            if (moveData.hasFlyInClaimPermission()) {
                 return FlightAbility.NO_CLAIM;
             } else {
                 return FlightAbility.UNABLE_TO_FLY;

@@ -13,10 +13,18 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 @Getter @Setter
 public class CompatManager {
+    /**
+     * Hooks that have already logged a lookup failure. A broken hook fails on every move,
+     * so it is reported once rather than per move.
+     */
+    private static final Set<String> failedHooks = ConcurrentHashMap.newKeySet();
+
     public static void init() {
         HookedPlugins.init();
     }
@@ -63,7 +71,7 @@ public class CompatManager {
                     FlyingHolder<?> flyingHolder = (FlyingHolder<?>) holder.getHolder();
 
                     if (holder.isEnabled()) {
-                        SingleSet<FlightAbility, FlightExtent> set = flyingHolder.wrapFlyable(data);
+                        SingleSet<FlightAbility, FlightExtent> set = wrapFlyableSafely(flyingHolder, data);
                         if (set != null) {
                             list.add(set);
                         }
@@ -76,6 +84,23 @@ public class CompatManager {
         }
 
         return result;
+    }
+
+    /**
+     * Queries one hook, turning any failure (including linkage errors from a mismatched plugin
+     * version) into {@link FlightAbility#ISSUE} so the remaining hooks still get a say.
+     */
+    public static SingleSet<FlightAbility, FlightExtent> wrapFlyableSafely(FlyingHolder<?> holder, PlayerMoveData data) {
+        try {
+            return holder.wrapFlyable(data);
+        } catch (Throwable e) {
+            if (failedHooks.add(holder.getIdentifier())) {
+                FlyingAllowed.getInstance().logWarning("Flight lookup failed for " + holder.getIdentifier()
+                        + "; treating it as no answer. Further failures from this hook are not logged.");
+                FlyingAllowed.getInstance().logWarning(e);
+            }
+            return new SingleSet<>(FlightAbility.ISSUE, holder.getExtent());
+        }
     }
 
     public static SingleSet<FlightAbility, FlightExtent> checkAndSet

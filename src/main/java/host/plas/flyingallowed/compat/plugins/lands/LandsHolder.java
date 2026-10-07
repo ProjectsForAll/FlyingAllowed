@@ -8,7 +8,6 @@ import host.plas.flyingallowed.data.PlayerMoveData;
 import me.angeschossen.lands.api.LandsIntegration;
 import me.angeschossen.lands.api.land.Land;
 import me.angeschossen.lands.api.land.LandWorld;
-import org.bukkit.Chunk;
 
 public class LandsHolder extends FlyingHolder<LandsIntegration> {
     public LandsHolder() {
@@ -22,17 +21,16 @@ public class LandsHolder extends FlyingHolder<LandsIntegration> {
         LandWorld toLandWorld = api().getWorld(moveData.getToWorld());
         if (toLandWorld == null) return FlightAbility.ISSUE;
 
-        Chunk chunk = moveData.getTo().getChunk();
-
-        Land land = toLandWorld.getLandByChunk(chunk.getX(), chunk.getZ());
+        // Chunk coordinates from block coordinates, so the lookup never loads the chunk.
+        Land land = toLandWorld.getLandByChunk(moveData.getTo().getBlockX() >> 4, moveData.getTo().getBlockZ() >> 4);
 
         if (land != null) {
             if (moveData.hasAllClaimsPermission()) {
                 return FlightAbility.ABLE_TO_FLY;
             }
 
-            if (moveData.getPlayer().hasPermission("flyingallowed.in.lands")) {
-                if (land.getOwnerUID().equals(moveData.getPlayer().getUniqueId()) || land.isTrusted(moveData.getPlayer().getUniqueId())) {
+            if (moveData.hasFlyInClaimPermission()) {
+                if (moveData.getPlayer().getUniqueId().equals(land.getOwnerUID()) || land.isTrusted(moveData.getPlayer().getUniqueId())) {
                     return FlightAbility.ABLE_TO_FLY;
                 } else {
                     return FlightAbility.UNABLE_TO_FLY;
@@ -41,7 +39,7 @@ public class LandsHolder extends FlyingHolder<LandsIntegration> {
                 return FlightAbility.UNABLE_TO_FLY;
             }
         } else {
-            if (moveData.getPlayer().hasPermission("flyingallowed.in.lands")) {
+            if (moveData.hasFlyInClaimPermission()) {
                 return FlightAbility.NO_CLAIM;
             } else {
                 return FlightAbility.UNABLE_TO_FLY;

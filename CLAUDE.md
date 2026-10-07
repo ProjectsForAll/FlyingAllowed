@@ -21,9 +21,14 @@ and never shaded.
 .\gradlew.bat shadowJar      # jar only
 ```
 
-There are **no tests** in this project — `test` is always NO-SOURCE. Don't
-report a passing test run as verification; verify by building and, when
-behavior matters, by loading the jar on a server.
+There is no unit-test suite — `test` is always NO-SOURCE. The only automated
+check is `testFlightState` (part of `check`, so `build` runs it): a plain
+`main()` under `src/regressionTest` that drives `PlayerMoveData` with
+`Proxy`-faked `Player`/`World` objects. The fakes throw on any method they don't
+stub, and plugin config is never initialized, so a code path it exercises must
+not touch config or unstubbed Bukkit calls. It covers the cache/auto-enable
+logic only; verify everything else by building and, when behavior matters, by
+loading the jar on a server.
 
 `layout.buildDirectory` is redirected to `target/` (not Gradle's default
 `build/`), and `target/` is gitignored.
