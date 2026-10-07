@@ -14,6 +14,14 @@ public class MoveDataCache {
     @Getter @Setter
     private static ConcurrentSkipListMap<String, FlightAbility> cacheLong = new ConcurrentSkipListMap<>();
 
+    /**
+     * Whether the player held {@code flyingallowed.allow.<world>} at their last world-permission
+     * fallback. The world permission is not part of the claim verdict, so a grant or revoke must be
+     * detected separately to count as an eligibility change.
+     */
+    @Getter @Setter
+    private static ConcurrentSkipListMap<String, Boolean> worldPermissionLong = new ConcurrentSkipListMap<>();
+
     @Getter @Setter
     private static CacheTimer timer;
 
@@ -33,6 +41,7 @@ public class MoveDataCache {
         flush();
 
         getCacheLong().clear();
+        getWorldPermissionLong().clear();
     }
 
     public static void cache(Player player, FlightAbility ability) {
@@ -58,6 +67,7 @@ public class MoveDataCache {
     public static void remove(Player player) {
         cache.remove(player.getUniqueId().toString());
         cacheLong.remove(player.getUniqueId().toString());
+        worldPermissionLong.remove(player.getUniqueId().toString());
     }
 
     public static void flush() {
@@ -74,5 +84,14 @@ public class MoveDataCache {
 
     public static boolean checkEquals(Player player, FlightAbility ability) {
         return cacheLong.get(player.getUniqueId().toString()) == ability;
+    }
+
+    /**
+     * Records the player's current world permission and reports whether it matches the last one
+     * recorded. The first record for a player is always a change.
+     */
+    public static boolean updateWorldPermission(Player player, boolean hasPermission) {
+        Boolean previous = worldPermissionLong.put(player.getUniqueId().toString(), hasPermission);
+        return previous != null && previous == hasPermission;
     }
 }

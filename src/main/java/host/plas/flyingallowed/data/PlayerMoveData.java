@@ -148,12 +148,15 @@ public class PlayerMoveData {
             e.printStackTrace();
         }
 
-        if (! unchanged && ! FlightState.isEnabled(player) && hasPermission() && checkBypassPermissionOn() && checkSoftBypassPermissionOn()
-                && FlightState.enable(player)) {
+        boolean worldPermission = hasPermission();
+        boolean worldPermissionUnchanged = MoveDataCache.updateWorldPermission(player, worldPermission);
+
+        if (! (unchanged && worldPermissionUnchanged) && ! FlightState.isEnabled(player) && worldPermission
+                && checkBypassPermissionOn() && checkSoftBypassPermissionOn() && FlightState.enable(player)) {
 
             Sender sender = new Sender(player);
             sender.sendMessage(FlyingAllowed.getMessageConfig().getToggleOnWorldMessage());
-        } else if (player.getAllowFlight() && ! hasPermission() && checkBypassPermissionOff() && checkSoftBypassPermissionOff()) {
+        } else if (player.getAllowFlight() && ! worldPermission && checkBypassPermissionOff() && checkSoftBypassPermissionOff()) {
             player.setFlying(false);
             player.setAllowFlight(false);
             teleportTopLocation();

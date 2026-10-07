@@ -1,6 +1,5 @@
 package host.plas.flyingallowed.compat.plugins.ifactions;
 
-import host.plas.flyingallowed.FlyingAllowed;
 import host.plas.flyingallowed.compat.plugins.FlyingHolder;
 import host.plas.flyingallowed.data.FlightAbility;
 import host.plas.flyingallowed.data.FlightExtent;
@@ -35,14 +34,10 @@ public class IFactionsHolder extends FlyingHolder<ImprovedFactionsPlugin> {
     public FlightAbility isFlyableAtLocation(PlayerMoveData moveData) {
         if (! isEnabled()) return FlightAbility.NO_API;
 
-        try {
-            // Improved Factions entities are Exposed DAOs, so every read must happen inside a
-            // transaction; the verdict is computed in here so no entity escapes it.
-            return ThreadLocalTransactionManagerKt.transaction(null, tx -> resolve(moveData));
-        } catch (Throwable e) {
-            FlyingAllowed.getInstance().logWarning("Failed to query Improved Factions claim: " + e.getMessage());
-            return FlightAbility.ISSUE;
-        }
+        // Improved Factions entities are Exposed DAOs, so every read must happen inside a
+        // transaction; the verdict is computed in here so no entity escapes it. A failure
+        // propagates to CompatManager.wrapFlyableSafely, which reports ISSUE and logs once.
+        return ThreadLocalTransactionManagerKt.transaction(null, tx -> resolve(moveData));
     }
 
     private FlightAbility resolve(PlayerMoveData moveData) {

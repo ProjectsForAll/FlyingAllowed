@@ -89,14 +89,20 @@ into a `PlayerMoveData`, and calls `checkPermission()` on it. `PlayerMoveData`
 is the real decision engine — it holds both the from/to locations and all the
 policy logic.
 
+`FlightWorlds` ignores cancelled events and `PlayerMoveEvent`s that stay
+inside one block (claims resolve per block, so head turns can't change the
+verdict). It also drops a player's cached verdict on quit, world change,
+respawn, and gamemode change — the last two reset allow-flight.
+
 Order of checks in `PlayerMoveData.checkPermission()`:
 
-1. **World gate** — `isWorldDisabled()` against `WorldConfig`, which is a
+1. **Gamemode** — creative and spectator are left alone (including by
+   full-disable worlds).
+2. **World gate** — `isWorldDisabled()` against `WorldConfig`, which is a
    list plus a `whitelist` flag (so the list means either "disabled here" or
    "only enabled here"), plus a `full-disable` flag that force-lands the player
    instead of merely skipping.
-2. **Cache** — if `MoveDataCache` already has a verdict for this player, stop.
-3. **Gamemode** — creative and spectator are left alone.
+3. **Cache** — if `MoveDataCache` already has a verdict for this player, stop.
 4. **Claim/region query** — `CompatManager.getFlyingAllowed(this)` fans out to
    every enabled hook.
 5. **Apply** — `checkFlyAndIsHandled(...)` toggles flight and sends the
@@ -155,6 +161,27 @@ flag already exists from the previous load.
 latency of any claim change taking effect** — a stale entry means a player keeps
 or loses flight until the flush. Note `cache(...)` no-ops if a key is already
 present, so entries are not overwritten mid-period.
+
+`cacheLong` (plus `worldPermissionLong` for the `flyingallowed.allow.<world>`
+fallback) is the *last known* verdict, and auto-**enabling** only happens when
+the new verdict differs from it; denials are enforced on every lookup. This is
+what keeps a player who turned flight off from having it forced back on (and
+re-messaged) every flush. Hence two ways to drop an entry:
+
+- `MoveDataCache.invalidate(player)` — clears only the short `cache`: the next
+  move re-runs the lookup, but an unchanged `ABLE_TO_FLY` still won't
+  re-enable. Used after `/fly` and `/set-fly`.
+- `MoveDataCache.remove(player)` — forgets everything, so the next lookup
+  counts as a change and may auto-enable. Used when the player's flight state
+  was reset underneath us (world change, respawn, gamemode change, rejoin) and
+  on bypass toggle.
+
+Swapping one for the other in the commands brings back "`/fly` off is undone
+on the next step".
+
+A hook that throws is caught per hook in `CompatManager.wrapFlyableSafely`,
+which returns `ISSUE` and logs once per hook — so hooks should not
+catch-and-warn themselves (that logs on every move).
 
 ### Config
 
