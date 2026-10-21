@@ -21,8 +21,10 @@ public class LandsHolder extends FlyingHolder<LandsIntegration> {
         LandWorld toLandWorld = api().getWorld(moveData.getToWorld());
         if (toLandWorld == null) return FlightAbility.ISSUE;
 
-        // Chunk coordinates from block coordinates, so the lookup never loads the chunk.
-        Land land = toLandWorld.getLandByChunk(moveData.getTo().getBlockX() >> 4, moveData.getTo().getBlockZ() >> 4);
+        // A teleport or portal destination is often not loaded yet, and getLandByChunk reports
+        // unloaded chunks as unclaimed. getLandByUnloadedChunk answers from Lands' cached claim
+        // data for loaded and unloaded chunks alike, without loading the chunk.
+        Land land = toLandWorld.getLandByUnloadedChunk(moveData.getTo().getBlockX() >> 4, moveData.getTo().getBlockZ() >> 4);
 
         if (land != null) {
             if (moveData.hasAllClaimsPermission()) {
