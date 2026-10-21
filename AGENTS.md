@@ -1,4 +1,12 @@
-# CLAUDE.md
+> **Note:** This file was written specifically for Claude (Claude Code), so
+> some wording may not fit other agents exactly — e.g. Claude-specific tool
+> names, skills, or features. Interpret those in terms of your own equivalents.
+>
+> The master copy of the global rules these instructions build on lives at
+> `{USER HOME}/.claude/CLAUDE.md` (e.g. `C:\Users\<user>\.claude\CLAUDE.md`).
+> Read it as well; rules there apply unless this file overrides them.
+
+# AGENTS.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
@@ -10,7 +18,7 @@ which WorldGuard region. It reads the state of many third-party claim plugins
 rather than owning claims itself.
 
 Built on **BukkitOfUtils (BOU)** — see the `bou` skill, and BOU's source at
-`C:\Users\nitra\OneDrive\Development\Java\Plugins\BukkitOfUtils`. BOU is a
+`{USERPROFILE}\OneDrive\Development\Java\Plugins\BukkitOfUtils`. BOU is a
 separate server plugin (a hard `depend` in `plugin.yml`), consumed `compileOnly`
 and never shaded.
 
