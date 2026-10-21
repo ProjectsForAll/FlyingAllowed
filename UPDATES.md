@@ -9,6 +9,7 @@
 - Fixed flight not returning inside a flyable claim after a respawn or a gamemode change.
 - Fixed SuperiorSkyblock2 letting every visitor fly on any island.
 - Fixed errors in GriefPrevention admin claims.
+- Fixed Lands flight turning off after teleporting into claims.
 - Lands, KingdomsX, ProtectionStones, and SuperiorSkyblock2 now honor the configured in-claims permission (`flyingallowed.in.lands` still works).
 - Full-disable worlds no longer affect creative or spectator players.
 - One failing claim plugin no longer breaks flight checks for the others.
